@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coppermoon Consulting | Banking Technology Consultant</title>
     <meta name="description" content="Banking technology consulting specializing in core system conversions, digital banking implementations, and enterprise project management for banks and credit unions.">
+    <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="moon-icon.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -73,6 +76,15 @@
             color: var(--navy);
             text-decoration: none;
             letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
         }
 
         .logo span {
@@ -573,7 +585,7 @@
     <!-- NAV -->
     <nav id="nav">
         <div class="nav-inner">
-            <a href="#" class="logo">Copper<span>moon</span></a>
+            <a href="#" class="logo"><img src="moon-icon.png" alt="Coppermoon">Copper<span>moon</span></a>
             <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
