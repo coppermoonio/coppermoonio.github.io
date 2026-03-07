@@ -117,10 +117,28 @@
             transition: 0.3s;
         }
 
+        /* BANNER */
+        .banner {
+            margin-top: 60px;
+            width: 100%;
+            overflow: hidden;
+            max-height: 350px;
+            background: var(--navy);
+        }
+
+        .banner img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            opacity: 0.7;
+        }
+
         /* HERO */
         .hero {
-            min-height: 100vh;
-            background: linear-gradient(165deg, rgba(12,27,42,0.92) 0%, rgba(22,45,68,0.88) 50%, rgba(30,58,95,0.85) 100%), url('hero-bg.jpg') center/cover no-repeat;
+            min-height: auto;
+            background: linear-gradient(165deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy-light) 100%);
             display: flex;
             align-items: center;
             position: relative;
@@ -151,7 +169,7 @@
         .hero-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 8rem 3rem 6rem;
+            padding: 5rem 3rem;
             position: relative;
             z-index: 2;
         }
@@ -980,7 +998,9 @@
             .nav-links.open { right: 0; }
 
             section { padding: 4rem 1.5rem; }
-            .hero-content { padding: 7rem 1.5rem 4rem; }
+            .hero-content { padding: 3rem 1.5rem; }
+            .banner { max-height: 200px; margin-top: 56px; }
+            .banner img { height: 200px; }
             .hero-stats { flex-direction: column; gap: 1.5rem; }
             .problem-grid { grid-template-columns: 1fr; gap: 2rem; }
             .services-grid { grid-template-columns: 1fr; }
@@ -1017,6 +1037,11 @@
             <span></span><span></span><span></span>
         </button>
     </nav>
+
+    <!-- BANNER -->
+    <div class="banner">
+        <img src="hero-bg.jpg" alt="Banking technology and financial services" />
+    </div>
 
     <!-- HERO -->
     <section class="hero">
