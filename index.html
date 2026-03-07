@@ -120,7 +120,7 @@
         /* HERO */
         .hero {
             min-height: 100vh;
-            background: linear-gradient(165deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy-light) 100%);
+            background: linear-gradient(165deg, rgba(12,27,42,0.92) 0%, rgba(22,45,68,0.88) 50%, rgba(30,58,95,0.85) 100%), url('hero-bg.jpg') center/cover no-repeat;
             display: flex;
             align-items: center;
             position: relative;
@@ -736,10 +736,21 @@
 
         .about-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
+            grid-template-columns: auto 2fr 1fr;
+            gap: 3rem;
             margin-top: 3rem;
             align-items: start;
+        }
+
+        .about-photo {
+            width: 220px;
+            flex-shrink: 0;
+        }
+
+        .about-photo img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
         .about-text p {
@@ -977,6 +988,7 @@
             .process-steps { grid-template-columns: 1fr 1fr; gap: 1rem; }
             .process-step::after, .process-step::before { display: none; }
             .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .about-photo { width: 180px; margin: 0 auto; }
             .contact-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
             footer { flex-direction: column; gap: 0.5rem; text-align: center; }
@@ -1297,6 +1309,9 @@
             <h2 class="section-title">One advisor who's been in the room when it matters</h2>
 
             <div class="about-grid">
+                <div class="about-photo">
+                    <img src="rod-headshot.png" alt="Rod Garlick, Principal Consultant at Coppermoon Consulting">
+                </div>
                 <div class="about-text">
                     <p>Coppermoon Consulting was founded by Rod Garlick, a banking technology specialist with 27 years of hands-on experience managing implementations for financial institutions ranging from community credit unions to Fortune 500 banks.</p>
                     <p>Rod has worked across 50+ technology implementations spanning core system conversions, single system integrations, affiliate bank acquisition programs, digital banking platform rollouts, lending system migrations, and complex multi-vendor programs. He understands not just the technology, but the organizational dynamics, vendor politics, and regulatory landscape that determine whether a conversion succeeds or fails.</p>
