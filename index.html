@@ -252,6 +252,8 @@
         .contact-form textarea { resize: vertical; min-height: 120px; }
         .contact-form select option { background: var(--navy); color: var(--white); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-field { display: flex; flex-direction: column; }
+        .form-field label { font-size: 0.75rem; color: var(--slate); margin-top: 0.25rem; letter-spacing: 0.03em; }
         .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .submit-btn {
             padding: 1rem 2rem; background: var(--copper); color: var(--white); border: none;
@@ -514,30 +516,20 @@
 
             <div class="checklist-inner">
                 <div class="checklist-text">
-                    <h3>Is your institution ready?</h3>
-                    <p>Technology implementations fail when critical elements are missed. This checklist covers the patterns we've seen derail projects across 50+ implementations.</p>
-                    <ul class="checklist-items">
-                        <li>Contract review for termination penalties & restrictions</li>
-                        <li>Data flow verification into reporting repositories</li>
-                        <li>Data governance & security compliance</li>
-                        <li>Post-conversion activity planning</li>
-                        <li>Project plan completeness & accessibility</li>
-                        <li>Customer/member service center readiness</li>
-                        <li>Member/customer impact assessment</li>
-                    </ul>
+                    <h3>Are you ready?</h3>
+                    <p>Core system conversions and application implementations are a complex business. Many systems, processes, technologies and business practices overlap. Coppermoon helps you see the full picture with our Readiness Assessments. Here's a sample checklist to give you a sense of what it takes to keep technology projects on track.</p>
                 </div>
                 <div class="checklist-form">
                     <h4>Get your free checklist</h4>
-                    <p>Enter your details and we'll send you the checklist immediately.</p>
-                    <form action="https://formspree.io/f/xaqpqrkz" method="POST" id="checklistForm">
-                        <input type="hidden" name="_subject" value="Checklist Download Request">
-                        <input type="hidden" name="source" value="checklist_download">
+                    <p>Complete the form to download immediately.</p>
+                    <form id="checklistForm" onsubmit="return handleChecklistSubmit(event)">
                         <input type="text" name="name" placeholder="Your Name" required>
                         <input type="email" name="email" placeholder="Email Address" required>
-                        <input type="text" name="company" placeholder="Institution Name">
-                        <input type="tel" name="phone" placeholder="Phone">
-                        <button type="submit" class="checklist-btn" onclick="setTimeout(function(){ window.open('Coppermoon_Implementation_Checklist.pdf','_blank'); }, 500);">Download Checklist →</button>
+                        <input type="text" name="company" placeholder="Institution Name" required>
+                        <input type="tel" name="phone" placeholder="Phone" required>
+                        <button type="submit" class="checklist-btn">Download Checklist →</button>
                     </form>
+                    <p id="checklistSuccess" style="display:none; color:#86EFAC; font-size:0.9rem; margin-top:0.75rem;">✓ Downloading your checklist now!</p>
                 </div>
             </div>
         </div>
@@ -583,7 +575,7 @@
 
             <div class="about-grid">
                 <div class="about-photo">
-                    <img src="rod-headshot.png" alt="Rod Garlick, Principal Consultant at Coppermoon Consulting">
+                    <img src="Rod.Profile.2020.jpg" alt="Rod Garlick, Principal Consultant at Coppermoon Consulting">
                 </div>
                 <div class="about-text">
                     <p>Coppermoon is led by Rod Garlick, who brings 27 years and 50+ implementations across community banks and credit unions. Every assessment is conducted personally by Rod — not handed off to junior staff.</p>
@@ -621,25 +613,40 @@
 
             <div class="contact-grid">
                 <form class="contact-form" action="https://formspree.io/f/xaqpqrkz" method="POST">
+                    <input type="hidden" name="_next" value="https://coppermoon.io/thank-you.html">
+                    <p style="font-size:0.8rem; color:var(--slate); margin-bottom:0.5rem;">* Required fields</p>
                     <div class="form-row">
-                        <input type="text" name="name" placeholder="Your Name" required>
-                        <input type="text" name="company" placeholder="Institution Name" required>
+                        <div class="form-field">
+                            <input type="text" name="name" placeholder="Your Name" required>
+                            <label>Name *</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" name="company" placeholder="Institution Name" required>
+                            <label>Financial Institution *</label>
+                        </div>
                     </div>
                     <div class="form-row">
-                        <input type="email" name="email" placeholder="Email Address" required>
-                        <input type="tel" name="phone" placeholder="Phone" required>
+                        <div class="form-field">
+                            <input type="email" name="email" placeholder="Email Address" required>
+                            <label>Email *</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="tel" name="phone" placeholder="Phone" required>
+                            <label>Phone *</label>
+                        </div>
                     </div>
                     <div class="form-row">
-                        <input type="url" name="website" placeholder="Company URL" required>
-                        <select name="interest">
-                            <option value="" style="background:var(--navy);">Area of Interest</option>
-                            <option value="conversion" style="background:var(--navy);">Core Conversion Readiness</option>
-                            <option value="single" style="background:var(--navy);">Single System Implementation</option>
-                            <option value="ma" style="background:var(--navy);">M&A Technology Due Diligence</option>
-                            <option value="ai" style="background:var(--navy);">AI Readiness</option>
-                            <option value="mid-project" style="background:var(--navy);">Mid-Project Assessment</option>
-                            <option value="other" style="background:var(--navy);">Other</option>
-                        </select>
+                        <div class="form-field" style="grid-column: 1 / -1;">
+                            <select name="interest">
+                                <option value="" style="background:var(--navy);">Area of Interest</option>
+                                <option value="conversion" style="background:var(--navy);">Core Conversion Readiness</option>
+                                <option value="single" style="background:var(--navy);">Single System Implementation</option>
+                                <option value="ma" style="background:var(--navy);">M&A Technology Due Diligence</option>
+                                <option value="ai" style="background:var(--navy);">AI Readiness</option>
+                                <option value="mid-project" style="background:var(--navy);">Mid-Project Assessment</option>
+                                <option value="other" style="background:var(--navy);">Other</option>
+                            </select>
+                        </div>
                     </div>
                     <textarea name="project" placeholder="Tell us about your project — where are you in the process, what's keeping you up at night?" rows="5"></textarea>
                     <div class="btn-row">
@@ -664,13 +671,6 @@
                         <div class="contact-detail-text">
                             <h4>LinkedIn</h4>
                             <a href="https://www.linkedin.com/in/rodgarlick/" target="_blank" rel="noopener">linkedin.com/in/rodgarlick</a>
-                        </div>
-                    </div>
-                    <div class="contact-detail">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        <div class="contact-detail-text">
-                            <h4>Location</h4>
-                            <p>Utah</p>
                         </div>
                     </div>
                     <div class="contact-security">
@@ -710,6 +710,32 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Gated checklist download
+        function handleChecklistSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('checklistForm');
+            const formData = new FormData(form);
+            
+            // Submit to Formspree via AJAX
+            fetch('https://formspree.io/f/xaqpqrkz', {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('checklistSuccess').style.display = 'block';
+                    window.open('Coppermoon_Implementation_Checklist.pdf', '_blank');
+                    form.reset();
+                } else {
+                    alert('There was an issue. Please try again or email rod@coppermoon.io');
+                }
+            }).catch(error => {
+                alert('There was an issue. Please try again or email rod@coppermoon.io');
+            });
+            
+            return false;
+        }
     </script>
 
 </body>
