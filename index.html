@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coppermoon | Technology Risk Assessment for Financial Institutions</title>
+    <meta name="description" content="We prevent catastrophic failures in financial institution technology projects. Independent risk assessments for community banks and credit unions — before, during, and after implementation.">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --copper: #B87333;
+            --copper-light: #D4956B;
+            --copper-dark: #8B5A2B;
+            --navy: #0C1B2A;
+            --navy-mid: #162D44;
+            --navy-light: #1E3A5F;
+            --slate: #94A3B8;
+            --slate-light: #CBD5E1;
+            --cream: #FAF7F2;
+            --white: #FFFFFF;
+            --green-go: #22C55E;
+            --yellow-caution: #EAB308;
+            --red-stop: #EF4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--navy);
+            background: var(--cream);
+            font-weight: 400;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1.25rem 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s ease;
+            background: var(--navy);
+        }
+        nav.scrolled {
+            background: var(--navy); padding: 0.75rem 3rem;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); text-decoration: none; letter-spacing: 0.02em;
+        }
+        .nav-logo span { color: var(--copper-light); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--slate-light); text-decoration: none; font-size: 0.875rem;
+            font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--copper-light); }
+        .nav-cta {
+            background: var(--copper) !important; color: var(--white) !important;
+            padding: 0.5rem 1.25rem; border-radius: 4px; transition: background 0.3s !important;
+        }
+        .nav-cta:hover { background: var(--copper-dark) !important; }
+        .mobile-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        .mobile-toggle span { display: block; width: 24px; height: 2px; background: var(--white); margin: 5px 0; transition: 0.3s; }
+
+        /* BANNER */
+        .banner { margin-top: 60px; width: 100%; overflow: hidden; background: var(--navy); }
+        .banner img { width: 100%; height: auto; display: block; opacity: 0.85; }
+
+        /* HERO */
+        .hero {
+            min-height: auto;
+            background: linear-gradient(165deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy-light) 100%);
+            display: flex; align-items: center; position: relative; overflow: hidden;
+            margin-top: 0; padding-top: 0;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%; width: 80%; height: 200%;
+            background: radial-gradient(ellipse, rgba(184,115,51,0.06) 0%, transparent 60%); pointer-events: none;
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--copper), transparent);
+        }
+        .hero-content { max-width: 1200px; margin: 0 auto; padding: 3.5rem 3rem 5rem; position: relative; z-index: 2; }
+        .hero-label {
+            display: inline-block; color: var(--copper-light); font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem; border-bottom: 1px solid rgba(184,115,51,0.3);
+        }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--white); line-height: 1.15; max-width: 800px; margin-bottom: 1.5rem;
+        }
+        .hero h1 em { font-style: normal; color: var(--copper-light); }
+        .hero-sub {
+            font-size: 1.15rem; color: var(--slate); max-width: 650px;
+            line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 0.75rem;
+            background: var(--copper); color: var(--white); padding: 1rem 2rem;
+            text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            letter-spacing: 0.02em; border-radius: 4px; transition: all 0.3s;
+        }
+        .hero-cta:hover { background: var(--copper-dark); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(184,115,51,0.3); }
+        .hero-cta svg { width: 18px; height: 18px; transition: transform 0.3s; }
+        .hero-cta:hover svg { transform: translateX(4px); }
+        .hero-trust {
+            margin-top: 2rem; font-size: 0.9rem; color: var(--slate);
+            max-width: 650px; line-height: 1.7; font-weight: 300; font-style: italic;
+        }
+        .hero-stats {
+            display: flex; gap: 3rem; margin-top: 3rem; padding-top: 2.5rem;
+            border-top: 1px solid rgba(148,163,184,0.15);
+        }
+        .hero-stat-number { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--copper-light); line-height: 1; }
+        .hero-stat-label { font-size: 0.8rem; color: var(--slate); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* SECTIONS */
+        section { padding: 6rem 3rem; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            display: inline-block; color: var(--copper-dark); font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .section-title {
+            font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 2.75rem);
+            color: #050e18; line-height: 1.2; margin-bottom: 1rem; font-weight: 400;
+        }
+        .section-subtitle { font-size: 1.05rem; color: #475569; max-width: 600px; line-height: 1.7; font-weight: 400; }
+
+        /* PROBLEM SECTION */
+        .problem { background: var(--white); }
+        .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+        .problem-card { padding: 2rem; border-left: 3px solid var(--red-stop); background: var(--cream); border-radius: 0 8px 8px 0; }
+        .problem-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: 0.75rem; color: #050e18; }
+        .problem-card p { font-size: 0.95rem; color: #475569; line-height: 1.7; }
+        .problem-right { display: flex; flex-direction: column; gap: 1.5rem; }
+        .stat-highlight { display: flex; align-items: baseline; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .stat-highlight:last-child { border-bottom: none; }
+        .stat-number { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--copper); line-height: 1; flex-shrink: 0; }
+        .stat-text { font-size: 0.95rem; color: #475569; line-height: 1.5; }
+
+        /* SERVICES */
+        .services { background: var(--navy); color: var(--white); }
+        .services .section-label { color: var(--copper-light); }
+        .services .section-title { color: var(--white); }
+        .services .section-subtitle { color: var(--slate); }
+        .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 3rem; }
+        .service-card {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px; padding: 2.5rem 2rem; transition: all 0.4s; position: relative; overflow: hidden;
+        }
+        .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--copper); transform: scaleX(0); transition: transform 0.4s; }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .service-icon { width: 48px; height: 48px; background: rgba(184,115,51,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--copper-light); }
+        .service-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: var(--white); }
+        .service-card p { font-size: 0.9rem; color: var(--slate); line-height: 1.7; margin-bottom: 1.25rem; }
+        .service-includes { list-style: none; padding: 0; }
+        .service-includes li { font-size: 0.8rem; color: var(--slate-light); padding: 0.35rem 0; padding-left: 1.25rem; position: relative; }
+        .service-includes li::before { content: ''; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--copper); transform: translateY(-50%); }
+        .service-price { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; color: var(--slate); letter-spacing: 0.04em; text-transform: uppercase; }
+        .service-price strong { display: block; font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--copper-light); font-weight: 400; margin-top: 0.25rem; }
+        .services-phase-note {
+            margin-top: 2.5rem; padding: 1.5rem 2rem; background: rgba(184,115,51,0.08);
+            border: 1px solid rgba(184,115,51,0.15); border-radius: 8px;
+            font-size: 0.95rem; color: var(--slate-light); line-height: 1.7; text-align: center;
+        }
+        .services-phase-note strong { color: var(--copper-light); }
+
+        /* CHECKLIST DOWNLOAD */
+        .checklist { background: var(--white); }
+        .checklist-inner {
+            background: var(--navy); border-radius: 12px; padding: 3rem;
+            margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+            position: relative; overflow: hidden;
+        }
+        .checklist-inner::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 40%; height: 100%;
+            background: radial-gradient(ellipse at right, rgba(184,115,51,0.08), transparent); pointer-events: none;
+        }
+        .checklist-text { position: relative; z-index: 2; }
+        .checklist-text h3 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; color: var(--white); margin-bottom: 1rem; }
+        .checklist-text p { color: var(--slate); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .checklist-items { list-style: none; padding: 0; }
+        .checklist-items li { font-size: 0.85rem; color: var(--slate-light); padding: 0.4rem 0 0.4rem 1.5rem; position: relative; }
+        .checklist-items li::before { content: '☐'; position: absolute; left: 0; color: var(--copper-light); font-size: 0.9rem; }
+        .checklist-form { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; }
+        .checklist-form h4 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.5rem; }
+        .checklist-form p { color: var(--slate); font-size: 0.85rem; margin-bottom: 1.25rem; }
+        .checklist-form input {
+            width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--white);
+            font-family: 'DM Sans', sans-serif; font-size: 0.9rem; margin-bottom: 0.75rem; transition: border-color 0.3s;
+        }
+        .checklist-form input::placeholder { color: var(--slate); }
+        .checklist-form input:focus { outline: none; border-color: var(--copper); }
+        .checklist-btn {
+            width: 100%; padding: 0.875rem; background: var(--copper); color: var(--white);
+            border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 0.5rem;
+        }
+        .checklist-btn:hover { background: var(--copper-dark); box-shadow: 0 4px 15px rgba(184,115,51,0.3); }
+
+        /* PROCESS */
+        .process { background: var(--cream); }
+        .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 3rem; position: relative; }
+        .process-step { text-align: center; padding: 2rem 1.5rem; position: relative; }
+        .process-step::after { content: ''; position: absolute; top: 2.5rem; right: 0; width: 50%; height: 1px; background: var(--copper); opacity: 0.3; }
+        .process-step:last-child::after { display: none; }
+        .process-step::before { content: ''; position: absolute; top: 2.5rem; left: 0; width: 50%; height: 1px; background: var(--copper); opacity: 0.3; }
+        .process-step:first-child::before { display: none; }
+        .step-number { width: 48px; height: 48px; background: var(--copper); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 auto 1.25rem; position: relative; z-index: 2; }
+        .process-step h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #050e18; margin-bottom: 0.5rem; }
+        .process-step p { font-size: 0.85rem; color: #64748B; line-height: 1.6; }
+
+        /* ABOUT */
+        .about { background: var(--white); }
+        .about-grid { display: grid; grid-template-columns: auto 2fr 1fr; gap: 3rem; margin-top: 3rem; align-items: start; }
+        .about-photo { width: 220px; flex-shrink: 0; }
+        .about-photo img { width: 100%; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+        .about-text p { font-size: 1rem; color: #475569; line-height: 1.8; margin-bottom: 1.25rem; }
+        .about-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        .about-systems { background: var(--cream); padding: 2rem; border-radius: 8px; }
+        .about-systems h4 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #050e18; margin-bottom: 1rem; }
+        .about-systems .info-text { font-size: 0.9rem; color: #475569; line-height: 1.7; }
+
+        /* CONTACT */
+        .contact { background: var(--navy); color: var(--white); }
+        .contact .section-label { color: var(--copper-light); }
+        .contact .section-title { color: var(--white); }
+        .contact .section-subtitle { color: var(--slate); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+        .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+        .contact-form input, .contact-form textarea, .contact-form select {
+            width: 100%; padding: 0.875rem 1rem; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--white);
+            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: border-color 0.3s;
+        }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--slate); }
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: var(--copper); }
+        .contact-form textarea { resize: vertical; min-height: 120px; }
+        .contact-form select option { background: var(--navy); color: var(--white); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .submit-btn {
+            padding: 1rem 2rem; background: var(--copper); color: var(--white); border: none;
+            border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .submit-btn:hover { background: var(--copper-dark); box-shadow: 0 4px 15px rgba(184,115,51,0.3); }
+        .book-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 2rem; background: transparent; color: var(--copper-light);
+            border: 2px solid var(--copper); border-radius: 6px; font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none;
+        }
+        .book-btn:hover { background: var(--copper); color: var(--white); }
+        .contact-info-side { display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
+        .contact-detail { display: flex; gap: 1rem; align-items: flex-start; }
+        .contact-detail svg { width: 20px; height: 20px; color: var(--copper-light); flex-shrink: 0; margin-top: 0.25rem; }
+        .contact-detail-text h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate); margin-bottom: 0.25rem; }
+        .contact-detail-text a, .contact-detail-text p { color: var(--white); text-decoration: none; font-size: 0.95rem; }
+        .contact-detail-text a:hover { color: var(--copper-light); }
+        .contact-security { margin-top: 1rem; padding: 1.25rem; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.15); border-radius: 6px; }
+        .contact-security p { font-size: 0.8rem; color: var(--slate-light); line-height: 1.5; }
+        .contact-security strong { color: #86EFAC; }
+
+        /* FOOTER */
+        footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+        footer p { font-size: 0.8rem; color: var(--slate); }
+        footer a { color: var(--slate); text-decoration: none; transition: color 0.3s; }
+        footer a:hover { color: var(--copper-light); }
+
+        /* ANIMATIONS */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* MOBILE */
+        @media (max-width: 968px) {
+            nav { padding: 1rem 1.5rem; }
+            nav.scrolled { padding: 0.75rem 1.5rem; }
+            .mobile-toggle { display: block; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+                background: var(--navy); flex-direction: column; padding: 5rem 2rem 2rem;
+                transition: right 0.3s; box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            }
+            .nav-links.open { right: 0; }
+            section { padding: 4rem 1.5rem; }
+            .hero-content { padding: 3rem 1.5rem; }
+            .banner { margin-top: 56px; }
+            .banner img { width: 100%; height: auto; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .problem-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .checklist-inner { grid-template-columns: 1fr; padding: 2rem; }
+            .process-steps { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .process-step::after, .process-step::before { display: none; }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .about-photo { width: 180px; margin: 0 auto; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .btn-row { flex-direction: column; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.75rem; }
+            .process-steps { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <a href="#" class="nav-logo">Copper<span>moon</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact" class="nav-cta">Get Started</a></li>
+        </ul>
+        <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- BANNER -->
+    <div class="banner">
+        <img src="hero-bg.jpg" alt="Banking technology and financial services" />
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">Technology Risk Assessment</span>
+            <h1>We prevent catastrophic failures in financial institution <em>technology projects</em></h1>
+            <p class="hero-sub">Whether you're planning a core conversion, integrating systems after an acquisition, replacing a lending or digital banking platform, or implementing AI — we identify the risks, gaps, and patterns that lead to failure. Before, during, and after implementation.</p>
+            <a href="#contact" class="hero-cta">
+                Talk About Your Project
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <p class="hero-trust">No vendor bias. No implementation work. No product recommendations. Just an independent assessment from someone who's seen 50+ of these projects succeed and fail.</p>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-number">50+</div>
+                    <div class="hero-stat-label">Technology Implementations</div>
+                </div>
+                <div>
+                    <div class="hero-stat-number">27</div>
+                    <div class="hero-stat-label">Years in Financial Services Tech</div>
+                </div>
+                <div>
+                    <div class="hero-stat-number">15+</div>
+                    <div class="hero-stat-label">Core Platforms</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="problem" id="problem">
+        <div class="section-inner fade-in">
+            <span class="section-label">The Reality</span>
+            <h2 class="section-title">Most technology projects fail because nobody<br>asked the hard questions early enough</h2>
+            <div class="problem-grid">
+                <div>
+                    <div class="problem-card" style="margin-bottom: 1.5rem;">
+                        <h3>Your vendor won't tell you</h3>
+                        <p>Their incentive is to close the deal and start billing, not to tell you that your data isn't clean, your timeline is unrealistic, or your operations team is about to revolt. You need an independent voice in the room.</p>
+                    </div>
+                    <div class="problem-card">
+                        <h3>Even strong teams have blind spots</h3>
+                        <p>Your IT team may be excellent — and they may have done a conversion before. But they've only seen their institution's experience. The patterns that predict failure across 50+ implementations are only visible to someone who's been in those rooms repeatedly. We bring the cross-institutional perspective your team can't have.</p>
+                    </div>
+                </div>
+                <div class="problem-right">
+                    <div class="stat-highlight">
+                        <div class="stat-number">60%</div>
+                        <div class="stat-text">of core conversions exceed their original budget, often by millions in unexpected costs</div>
+                    </div>
+                    <div class="stat-highlight">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-text">of vendor timeline estimates prove optimistic based on actual conversion outcomes</div>
+                    </div>
+                    <div class="stat-highlight">
+                        <div class="stat-number">&lt;1%</div>
+                        <div class="stat-text">of project cost for a readiness assessment that identifies risks before they become disasters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+        <div class="section-inner fade-in">
+            <span class="section-label">Assessment Services</span>
+            <h2 class="section-title">Four ways to reduce your risk</h2>
+            <p class="section-subtitle">Each assessment is built on a comprehensive framework covering technology, data, people, vendors, compliance, costs, and governance. Modular by design — scoped to your situation.</p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3>Full Core System Conversion Readiness Assessment</h3>
+                    <p>The comprehensive assessment for institutions planning a full core platform migration. Covers every dimension — technology ecosystem, data, vendors, contracts, people, governance, regulatory, costs, and risk. Designed to answer one question: are you actually ready?</p>
+                    <ul class="service-includes">
+                        <li>Complete technology ecosystem mapping</li>
+                        <li>Data readiness & locus-of-data analysis</li>
+                        <li>Vendor & contract evaluation with deconversion review</li>
+                        <li>Department mapping — roles, duties, dependencies</li>
+                        <li>Staff change management & resistance assessment</li>
+                        <li>Data security & governance review</li>
+                        <li>Regulatory disclosure requirements</li>
+                        <li>Realistic cost & timeline analysis</li>
+                        <li>Customer communication & attrition risk</li>
+                        <li>Contingency planning</li>
+                        <li>Risk scorecard with go/no-go recommendation</li>
+                    </ul>
+                    <div class="service-price">
+                        A fraction of your conversion cost
+                        <strong>Starting from $25,000</strong>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    </div>
+                    <h3>Limited Conversion or Single Product Implementation Assessment</h3>
+                    <p>For institutions planning a single system migration — lending platform, digital banking, card processing, or similar. Narrower scope, but the same rigorous framework applied to your specific project. Also ideal for institutions early in the evaluation process who want a focused readiness check before committing.</p>
+                    <ul class="service-includes">
+                        <li>System-specific technology assessment</li>
+                        <li>Integration point & dependency mapping</li>
+                        <li>Data readiness for targeted migration</li>
+                        <li>Vendor & contract review</li>
+                        <li>Staffing & organizational readiness</li>
+                        <li>Risk scorecard with recommendations</li>
+                    </ul>
+                    <div class="service-price">
+                        A fraction of your implementation cost
+                        <strong>Starting from $10,000</strong>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <h3>M&A Technology Due Diligence</h3>
+                    <p>For institutions considering an acquisition. Understand what you're buying before the deal closes — technology stack, integration complexity, contract liabilities, staff retention risks, and realistic timelines. Your findings can influence the deal price or the decision to proceed.</p>
+                    <ul class="service-includes">
+                        <li>Target institution technology assessment</li>
+                        <li>Integration cost & complexity analysis</li>
+                        <li>Contract & licensing liability review</li>
+                        <li>Staff retention & cultural factors</li>
+                        <li>Customer attrition risk modeling</li>
+                        <li>Deal impact recommendation</li>
+                    </ul>
+                    <div class="service-price">
+                        A fraction of your acquisition cost
+                        <strong>Starting from $20,000</strong>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h3>AI Implementation Readiness</h3>
+                    <p>For institutions evaluating AI tools — chatbots, fraud detection, document processing, lending automation. Cut through vendor hype and assess whether your data, infrastructure, and team are actually ready. Includes regulatory implications specific to AI in banking.</p>
+                    <ul class="service-includes">
+                        <li>AI-specific data readiness assessment</li>
+                        <li>Infrastructure & integration evaluation</li>
+                        <li>Vendor claims reality check</li>
+                        <li>Regulatory & compliance implications</li>
+                        <li>Staff readiness & change management</li>
+                        <li>ROI validation & timeline assessment</li>
+                    </ul>
+                    <div class="service-price">
+                        A fraction of your AI investment
+                        <strong>Starting from $10,000</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="services-phase-note">
+                <strong>Every phase. Every project type.</strong> Whether you haven't started yet, you're mid-project and hitting problems, or the go-live happened and things aren't right — our assessment framework applies. We deliver the assessment. You make the decision.
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKLIST DOWNLOAD -->
+    <section class="checklist" id="checklist">
+        <div class="section-inner fade-in">
+            <span class="section-label">Free Resource</span>
+            <h2 class="section-title">Download a sample checklist</h2>
+            <p class="section-subtitle">7 critical questions every financial institution should answer before their next technology implementation.</p>
+
+            <div class="checklist-inner">
+                <div class="checklist-text">
+                    <h3>Is your institution ready?</h3>
+                    <p>Technology implementations fail when critical elements are missed. This checklist covers the patterns we've seen derail projects across 50+ implementations.</p>
+                    <ul class="checklist-items">
+                        <li>Contract review for termination penalties & restrictions</li>
+                        <li>Data flow verification into reporting repositories</li>
+                        <li>Data governance & security compliance</li>
+                        <li>Post-conversion activity planning</li>
+                        <li>Project plan completeness & accessibility</li>
+                        <li>Customer/member service center readiness</li>
+                        <li>Member/customer impact assessment</li>
+                    </ul>
+                </div>
+                <div class="checklist-form">
+                    <h4>Get your free checklist</h4>
+                    <p>Enter your details and we'll send you the checklist immediately.</p>
+                    <form action="https://formspree.io/f/xaqpqrkz" method="POST" id="checklistForm">
+                        <input type="hidden" name="_subject" value="Checklist Download Request">
+                        <input type="hidden" name="source" value="checklist_download">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <input type="text" name="company" placeholder="Institution Name">
+                        <input type="tel" name="phone" placeholder="Phone">
+                        <button type="submit" class="checklist-btn" onclick="setTimeout(function(){ window.open('Coppermoon_Implementation_Checklist.pdf','_blank'); }, 500);">Download Checklist →</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="process" id="process">
+        <div class="section-inner fade-in">
+            <span class="section-label">How It Works</span>
+            <h2 class="section-title">From engagement to deliverable in weeks, not months</h2>
+            <p class="section-subtitle">No bloated consulting engagement. No team of juniors. One experienced advisor, a proven framework, and a clear deliverable.</p>
+
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Discovery Call</h3>
+                    <p>30-minute conversation to understand your situation, scope the engagement, and confirm fit. No charge, no obligation.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Secure Intake</h3>
+                    <p>You complete an intake questionnaire and upload key documents through our secure client portal. Your data never touches public systems.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Assessment</h3>
+                    <p>On-site or remote interviews with key stakeholders. Technology review. Vendor evaluation. Organizational and data analysis. Typically 3-5 days.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Deliverable</h3>
+                    <p>Comprehensive readiness report with risk scorecard, prioritized recommendations, and a clear go/no-go assessment. Presented to your leadership team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="section-inner fade-in">
+            <span class="section-label">About Coppermoon</span>
+            <h2 class="section-title">We deliver the assessment. You make the decision.</h2>
+
+            <div class="about-grid">
+                <div class="about-photo">
+                    <img src="rod-headshot.png" alt="Rod Garlick, Principal Consultant at Coppermoon Consulting">
+                </div>
+                <div class="about-text">
+                    <p>Coppermoon is led by Rod Garlick, who brings 27 years and 50+ implementations across community banks and credit unions. Every assessment is conducted personally by Rod — not handed off to junior staff.</p>
+                    <p>We have hands-on experience managing implementations for financial institutions ranging from community credit unions to Fortune 500 banks. Our background spans both sides of the table — working for core processors, mortgage and consumer lending software companies helping with their conversions and implementations, as well as inside financial institutions evaluating technology deployment, vendor performance, and contract negotiations.</p>
+                    <p>We have worked across technology implementations spanning core system conversions, single system integrations, affiliate bank acquisition and integration programs, digital banking platform rollouts, lending system migrations, and complex multi-vendor programs. Our experience includes evaluating community bank technology usage and making recommendations about which software should be kept or replaced during acquisitions, as well as financial institution compliance at the enterprise level.</p>
+                    <p>We understand not just the technology, but the organizational dynamics, vendor politics, and regulatory landscape that determine whether a project succeeds or fails.</p>
+                    <p>Coppermoon exists because community banks and credit unions deserve the same caliber of independent advisory that large institutions get from the big consulting firms — without the six-figure price tag, the team of junior consultants, or the multi-month engagement.</p>
+                    <p>Every assessment is enhanced by AI-powered analytical tools for faster, more comprehensive analysis. Your institution gets direct access to decades of pattern recognition — not a methodology binder.</p>
+                </div>
+                <div class="about-sidebar">
+                    <div class="about-systems">
+                        <h4>Experience Across</h4>
+                        <div class="info-text">
+                            Core banking systems, digital & mobile banking, mortgage origination, consumer & indirect lending, credit & debit cards, payment processing, document imaging, data warehousing, and enterprise compliance platforms.
+                        </div>
+                    </div>
+
+                    <div class="about-systems">
+                        <h4>Data Security</h4>
+                        <div class="info-text">
+                            All client data is processed through private, encrypted API connections. Your information is never stored beyond 30 days, never used to train AI models, and never visible to other users. We can accommodate zero-data-retention requirements for institutions with strict compliance mandates.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="section-inner fade-in">
+            <span class="section-label">Let's Talk About Your Project</span>
+            <h2 class="section-title">Before your project goes off the rails —<br>let's find the gaps together</h2>
+            <p class="section-subtitle">Core conversion, platform migration, merger integration, or AI initiative. Tell us where you are and we'll tell you what we see.</p>
+
+            <div class="contact-grid">
+                <form class="contact-form" action="https://formspree.io/f/xaqpqrkz" method="POST">
+                    <div class="form-row">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="text" name="company" placeholder="Institution Name" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <input type="tel" name="phone" placeholder="Phone" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="url" name="website" placeholder="Company URL" required>
+                        <select name="interest">
+                            <option value="" style="background:var(--navy);">Area of Interest</option>
+                            <option value="conversion" style="background:var(--navy);">Core Conversion Readiness</option>
+                            <option value="single" style="background:var(--navy);">Single System Implementation</option>
+                            <option value="ma" style="background:var(--navy);">M&A Technology Due Diligence</option>
+                            <option value="ai" style="background:var(--navy);">AI Readiness</option>
+                            <option value="mid-project" style="background:var(--navy);">Mid-Project Assessment</option>
+                            <option value="other" style="background:var(--navy);">Other</option>
+                        </select>
+                    </div>
+                    <textarea name="project" placeholder="Tell us about your project — where are you in the process, what's keeping you up at night?" rows="5"></textarea>
+                    <div class="btn-row">
+                        <button type="submit" class="submit-btn">Send Message</button>
+                        <a href="https://cal.com/rod-garlick-coppermoon/30min?overlayCalendar=true" target="_blank" rel="noopener" class="book-btn">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            Book a Meeting
+                        </a>
+                    </div>
+                </form>
+
+                <div class="contact-info-side">
+                    <div class="contact-detail">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <div class="contact-detail-text">
+                            <h4>Email</h4>
+                            <a href="mailto:rod@coppermoon.io">rod@coppermoon.io</a>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                        <div class="contact-detail-text">
+                            <h4>LinkedIn</h4>
+                            <a href="https://www.linkedin.com/in/rodgarlick/" target="_blank" rel="noopener">linkedin.com/in/rodgarlick</a>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <div class="contact-detail-text">
+                            <h4>Location</h4>
+                            <p>Utah</p>
+                        </div>
+                    </div>
+                    <div class="contact-security">
+                        <p><strong>Your data stays private.</strong> All information submitted through this form and our secure client portal is encrypted and never shared. We use private API connections with zero data retention for all analytical work.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Coppermoon Consulting. All rights reserved.</p>
+        <p><a href="mailto:rod@coppermoon.io">rod@coppermoon.io</a></p>
+    </footer>
+
+    <script>
+        // Nav scroll
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+        });
+
+        // Mobile nav close on click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+
+        // Fade in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
