@@ -53,10 +53,11 @@
             box-shadow: 0 4px 30px rgba(0,0,0,0.15);
         }
         .nav-logo {
-            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
-            color: var(--white); text-decoration: none; letter-spacing: 0.02em;
+            display: flex; align-items: center; text-decoration: none;
         }
-        .nav-logo span { color: var(--copper-light); }
+        .nav-logo img {
+            height: 36px; width: auto;
+        }
         .nav-links { display: flex; gap: 2rem; list-style: none; }
         .nav-links a {
             color: var(--slate-light); text-decoration: none; font-size: 0.875rem;
@@ -327,7 +328,7 @@
 
     <!-- NAV -->
     <nav id="nav">
-        <a href="#" class="nav-logo">Copper<span>moon</span></a>
+        <a href="#" class="nav-logo"><img src="coppermoon-logo-nav.png" alt="Coppermoon"></a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#services">Services</a></li>
             <li><a href="#checklist">Checklist</a></li>
