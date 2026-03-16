@@ -192,15 +192,25 @@ function googleCalUrl(task) {
 
 // Actions
 function addTask() {
-    if (!form.title.trim()) return;
-    tasks.unshift({ ...form, id: genId(), done: false, created: TODAY });
+    var titleEl = document.getElementById('form-title');
+    var catEl = document.getElementById('form-category');
+    var priEl = document.getElementById('form-priority');
+    var dueEl = document.getElementById('form-due');
+    var notesEl = document.getElementById('form-notes');
+    if (!titleEl || !titleEl.value.trim()) return;
+    tasks.unshift({ id: genId(), title: titleEl.value.trim(), category: catEl.value, priority: priEl.value, due: dueEl.value, notes: notesEl.value, done: false, created: TODAY });
     saveTasks(); form = { title: '', category: 'Coppermoon', priority: 'Medium', due: TODAY, notes: '' };
     showForm = false; editId = null; render();
 }
 
 function updateTask() {
-    if (!form.title.trim()) return;
-    tasks = tasks.map(t => t.id === editId ? { ...t, ...form } : t);
+    var titleEl = document.getElementById('form-title');
+    var catEl = document.getElementById('form-category');
+    var priEl = document.getElementById('form-priority');
+    var dueEl = document.getElementById('form-due');
+    var notesEl = document.getElementById('form-notes');
+    if (!titleEl || !titleEl.value.trim()) return;
+    tasks = tasks.map(t => t.id === editId ? { ...t, title: titleEl.value.trim(), category: catEl.value, priority: priEl.value, due: dueEl.value, notes: notesEl.value } : t);
     saveTasks(); form = { title: '', category: 'Coppermoon', priority: 'Medium', due: TODAY, notes: '' };
     showForm = false; editId = null; render();
 }
@@ -281,17 +291,17 @@ function render() {
     // Form
     if (showForm) {
         html += '<div class="form-panel">';
-        html += '<input type="text" id="form-title" value="' + escHtml(form.title) + '" placeholder="Task title..." oninput="form.title=this.value;" />';
+        html += '<input type="text" id="form-title" value="' + escHtml(form.title) + '" placeholder="Task title..." />';
         html += '<div class="form-row">';
-        html += '<select onchange="form.category=this.value;">';
+        html += '<select id="form-category">';
         CATEGORIES.forEach(function(c) { html += '<option' + (form.category === c ? ' selected' : '') + '>' + c + '</option>'; });
         html += '</select>';
-        html += '<select onchange="form.priority=this.value;">';
+        html += '<select id="form-priority">';
         PRIORITIES.forEach(function(p) { html += '<option' + (form.priority === p ? ' selected' : '') + '>' + p + '</option>'; });
         html += '</select>';
-        html += '<input type="date" value="' + form.due + '" onchange="form.due=this.value;" />';
+        html += '<input type="date" id="form-due" value="' + form.due + '" />';
         html += '</div>';
-        html += '<textarea rows="2" placeholder="Notes (optional)..." oninput="form.notes=this.value;">' + escHtml(form.notes) + '</textarea>';
+        html += '<textarea id="form-notes" rows="2" placeholder="Notes (optional)...">' + escHtml(form.notes) + '</textarea>';
         html += '<button class="btn-save" onclick="' + (editId ? 'updateTask()' : 'addTask()') + '">' + (editId ? 'Update Task' : 'Add Task') + '</button>';
         html += '<button class="btn-cancel" onclick="showForm=false;editId=null;render();">Cancel</button>';
         html += '</div>';
