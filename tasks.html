@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coppermoon Tasks</title>
-<link rel="icon" type="image/png" href="moon-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -24,91 +23,97 @@
   --green: #10B981;
   --blue: #2563EB;
   --teal: #0D9488;
-  --pink: #DB2777;
   --purple: #7C3AED;
-
-  /* Category colors */
-  --cat-cm-bg: #FFF7ED; --cat-cm-border: #B87333; --cat-cm-text: #92400E; --cat-cm-badge: #B87333;
-  --cat-re-bg: #EFF6FF; --cat-re-border: #2563EB; --cat-re-text: #1E40AF; --cat-re-badge: #2563EB;
-  --cat-ns-bg: #F0FDF4; --cat-ns-border: #0D9488; --cat-ns-text: #065F46; --cat-ns-badge: #0D9488;
-  --cat-pe-bg: #FDF2F8; --cat-pe-border: #DB2777; --cat-pe-text: #9D174D; --cat-pe-badge: #DB2777;
-
-  /* Status colors */
-  --st-pd-bg: #FEF2F2; --st-pd-border: #DC2626;
-  --st-pe-bg: #F8FAFC; --st-pe-border: #94A3B8;
-  --st-ip-bg: #FFFBEB; --st-ip-border: #F59E0B;
-  --st-co-bg: #F0FDF4; --st-co-border: #10B981;
-  --st-as-bg: #F5F3FF; --st-as-border: #7C3AED;
+  --cat-cm-bg: #FFF7ED; --cat-cm-border: #B87333; --cat-cm-text: #92400E;
+  --cat-re-bg: #EFF6FF; --cat-re-border: #2563EB; --cat-re-text: #1E40AF;
+  --cat-ns-bg: #F0FDF4; --cat-ns-border: #0D9488; --cat-ns-text: #065F46;
+  --cat-pe-bg: #FDF2F8; --cat-pe-border: #DB2777; --cat-pe-text: #9D174D;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; }
 
-/* ── TOP NAV ── */
+/* PASSWORD SCREEN */
+#pw-screen {
+  position: fixed; inset: 0; background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; flex-direction: column; gap: 1.5rem;
+}
+#pw-screen img { height: 48px; opacity: 0.9; }
+#pw-screen h2 { color: white; font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; }
+#pw-form { display: flex; gap: 0.5rem; }
+#pw-input {
+  padding: 0.6rem 1rem; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08); color: white; font-family: inherit;
+  font-size: 0.9rem; outline: none; width: 200px; letter-spacing: 0.1em;
+}
+#pw-input::placeholder { color: rgba(255,255,255,0.3); letter-spacing: 0; }
+#pw-input:focus { border-color: var(--copper); }
+#pw-btn {
+  padding: 0.6rem 1.2rem; background: var(--copper); color: white;
+  border: none; border-radius: 8px; font-family: inherit; font-weight: 600;
+  cursor: pointer; font-size: 0.9rem;
+}
+#pw-error { color: #FCA5A5; font-size: 0.8rem; display: none; }
+
+/* TOP BAR */
 .topbar {
-  background: var(--navy);
-  padding: 0.75rem 1.5rem;
+  background: var(--navy); padding: 0.65rem 1.25rem;
   display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 100;
   box-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
-.topbar-left { display: flex; align-items: center; gap: 1rem; }
-.topbar img { height: 32px; }
-.topbar h1 { color: white; font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; }
+.topbar-left { display: flex; align-items: center; gap: 0.75rem; }
+.topbar img { height: 30px; }
+.topbar h1 { color: white; font-size: 1rem; font-weight: 600; }
 .topbar-right { display: flex; align-items: center; gap: 0.5rem; }
 
-/* Stats bar */
+/* STATS */
 .statsbar {
-  background: white;
-  border-bottom: 1px solid var(--g100);
-  padding: 0.5rem 1.5rem;
-  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-  font-size: 0.78rem; color: var(--g400);
+  background: white; border-bottom: 1px solid var(--g100);
+  padding: 0.4rem 1.25rem; display: flex; align-items: center; gap: 1rem;
+  flex-wrap: wrap; font-size: 0.75rem; color: var(--g400);
 }
 .statsbar .overdue { color: var(--red); font-weight: 700; }
-.statsbar .today { color: var(--amber); font-weight: 600; }
+.statsbar .today-stat { color: var(--amber); font-weight: 600; }
 
-/* ── VIEW TABS ── */
+/* VIEW TABS */
 .view-tabs {
-  background: white;
-  border-bottom: 2px solid var(--g100);
-  display: flex; padding: 0 1.5rem; gap: 0;
-  overflow-x: auto;
+  background: white; border-bottom: 2px solid var(--g100);
+  display: flex; padding: 0 1.25rem; overflow-x: auto;
 }
 .view-tab {
-  padding: 0.75rem 1.25rem;
-  border: none; background: transparent;
-  font-family: inherit; font-size: 0.83rem; font-weight: 500;
-  color: var(--g400); cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  white-space: nowrap;
-  transition: all 0.2s;
+  padding: 0.65rem 1.1rem; border: none; background: transparent;
+  font-family: inherit; font-size: 0.8rem; font-weight: 500;
+  color: var(--g400); cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; white-space: nowrap; transition: all 0.2s;
 }
 .view-tab:hover { color: var(--navy); }
-.view-tab.active { color: var(--copper); border-bottom-color: var(--copper); font-weight: 700; }
+.view-tab.active { color: var(--copper); border-bottom-color: var(--copper); font-weight: 700; font-size: 0.85rem; }
 
-/* ── TOOLBAR ── */
+/* TOOLBAR */
 .toolbar {
-  padding: 0.75rem 1.5rem;
-  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
-  background: var(--off);
+  padding: 0.6rem 1.25rem; display: flex; align-items: center;
+  gap: 0.6rem; flex-wrap: wrap; background: var(--off);
   border-bottom: 1px solid var(--g100);
 }
-.search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 320px; }
+.search-wrap { position: relative; flex: 1; min-width: 140px; max-width: 280px; }
 .search-wrap input {
-  width: 100%; padding: 0.45rem 0.75rem 0.45rem 2rem;
+  width: 100%; padding: 0.4rem 0.7rem 0.4rem 1.8rem;
   border: 1px solid var(--g200); border-radius: 8px;
-  font-family: inherit; font-size: 0.82rem; background: white;
-  outline: none; transition: border 0.2s;
+  font-family: inherit; font-size: 0.8rem; background: white; outline: none;
 }
 .search-wrap input:focus { border-color: var(--copper); }
-.search-icon { position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); color: var(--g400); font-size: 0.8rem; pointer-events: none; }
-.search-clear { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--g400); cursor: pointer; font-size: 0.8rem; }
-.cat-filters { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.search-icon { position: absolute; left: 0.55rem; top: 50%; transform: translateY(-50%); color: var(--g400); font-size: 0.75rem; pointer-events: none; }
+.sort-wrap { display: flex; align-items: center; gap: 0.4rem; }
+.sort-wrap label { font-size: 0.72rem; color: var(--g400); white-space: nowrap; }
+.sort-select {
+  padding: 0.35rem 0.6rem; border: 1px solid var(--g200); border-radius: 8px;
+  font-family: inherit; font-size: 0.75rem; background: white; outline: none; cursor: pointer;
+}
+.cat-filters { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 .cat-btn {
-  padding: 0.25rem 0.7rem; border-radius: 20px;
-  border: 1.5px solid var(--g200); background: white;
-  font-family: inherit; font-size: 0.72rem; font-weight: 500;
+  padding: 0.22rem 0.65rem; border-radius: 20px; border: 1.5px solid var(--g200);
+  background: white; font-family: inherit; font-size: 0.7rem; font-weight: 500;
   color: var(--g600); cursor: pointer; transition: all 0.15s;
 }
 .cat-btn.active-All { background: var(--navy); color: white; border-color: var(--navy); }
@@ -117,77 +122,106 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .cat-btn.active-NeoSci { background: var(--cat-ns-bg); color: var(--cat-ns-text); border-color: var(--cat-ns-border); font-weight: 700; }
 .cat-btn.active-Personal { background: var(--cat-pe-bg); color: var(--cat-pe-text); border-color: var(--cat-pe-border); font-weight: 700; }
 
-/* Buttons */
-.btn { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.9rem; border-radius: 8px; border: none; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 8px; border: none; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
 .btn-primary { background: var(--copper); color: white; }
 .btn-primary:hover { background: var(--copper2); }
 .btn-navy { background: var(--navy); color: white; }
-.btn-navy:hover { background: var(--navy2); }
 .btn-ghost { background: white; color: var(--g600); border: 1px solid var(--g200); }
 .btn-ghost:hover { background: var(--g50); }
 .btn-danger { background: white; color: var(--red); border: 1px solid #FCA5A5; }
-.btn-danger:hover { background: #FEF2F2; }
-.btn-sm { padding: 0.25rem 0.6rem; font-size: 0.7rem; border-radius: 5px; }
-.btn-mic { background: var(--g50); color: var(--g600); border: 1px solid var(--g200); }
-.btn-mic.listening { background: var(--red); color: white; border-color: var(--red); animation: pulse 1s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+.btn-sm { padding: 0.2rem 0.55rem; font-size: 0.68rem; border-radius: 5px; }
+.btn-mic.listening { background: var(--red); color: white; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.7} }
 
-/* ── MAIN CONTENT ── */
-.content { padding: 1.25rem 1.5rem; }
+/* MAIN LAYOUT - SPLIT VIEW */
+.main-layout {
+  display: flex; height: calc(100vh - 130px); overflow: hidden;
+}
+.list-pane {
+  flex: 1; overflow-y: auto; padding: 1rem 1.25rem;
+  min-width: 0;
+  transition: flex 0.3s ease;
+}
+.list-pane.with-detail { flex: 0 0 52%; }
+.detail-pane {
+  flex: 0 0 0; overflow: hidden;
+  border-left: 2px solid var(--g100);
+  background: white;
+  transition: flex 0.3s ease;
+  overflow-y: auto;
+}
+.detail-pane.open { flex: 0 0 48%; }
 
-/* ── FORM PANEL ── */
+@media(max-width: 768px) {
+  .main-layout { flex-direction: column; height: auto; }
+  .list-pane.with-detail { flex: none; }
+  .detail-pane { flex: none; border-left: none; border-top: 2px solid var(--g100); }
+  .detail-pane.open { flex: none; min-height: 400px; }
+}
+
+/* FORM PANEL */
 .form-panel {
-  background: white; border: 1px solid var(--g100);
-  border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  background: white; border: 1px solid var(--g100); border-radius: 12px;
+  padding: 1rem; margin-bottom: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 .form-panel input[type=text], .form-panel textarea {
-  width: 100%; padding: 0.6rem 0.75rem;
-  border: 1.5px solid var(--g200); border-radius: 8px;
-  font-family: inherit; font-size: 0.9rem; margin-bottom: 0.6rem;
-  outline: none; transition: border 0.2s;
+  width: 100%; padding: 0.55rem 0.7rem; border: 1.5px solid var(--g200);
+  border-radius: 8px; font-family: inherit; font-size: 0.85rem;
+  margin-bottom: 0.5rem; outline: none; transition: border 0.2s;
 }
 .form-panel input:focus, .form-panel textarea:focus { border-color: var(--copper); }
-.form-panel textarea { resize: vertical; font-size: 0.82rem; min-height: 60px; }
-.form-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+.form-panel textarea { resize: vertical; font-size: 0.8rem; min-height: 55px; }
+.form-row { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
 .form-row select, .form-row input[type=date], .form-row input[type=time] {
-  flex: 1; padding: 0.5rem 0.6rem;
-  border: 1.5px solid var(--g200); border-radius: 8px;
-  font-family: inherit; font-size: 0.8rem; min-width: 110px;
-  outline: none; background: white;
+  flex: 1; padding: 0.45rem 0.55rem; border: 1.5px solid var(--g200);
+  border-radius: 8px; font-family: inherit; font-size: 0.76rem;
+  min-width: 100px; outline: none; background: white;
 }
 .form-row select:focus, .form-row input:focus { border-color: var(--copper); }
-.form-row input[type=text].person-field { min-width: 140px; padding: 0.5rem 0.6rem; font-size: 0.8rem; margin-bottom: 0; }
-.form-actions { display: flex; gap: 0.5rem; }
+.form-actions { display: flex; gap: 0.4rem; }
 
-/* ── LIST VIEW ── */
-.task-list { display: flex; flex-direction: column; gap: 0.45rem; }
-.task-card {
-  background: white; border-radius: 10px;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--g100);
-  border-left: 4px solid transparent;
-  transition: box-shadow 0.2s, transform 0.1s;
-  cursor: pointer;
+/* TASK LIST */
+.task-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.section-header {
+  font-size: 0.68rem; font-weight: 700; color: var(--g400);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.6rem 0 0.2rem; display: flex; align-items: center; gap: 0.5rem;
 }
-.task-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.section-header .count {
+  background: var(--g100); color: var(--g600); border-radius: 10px;
+  padding: 0.05rem 0.4rem; font-size: 0.62rem;
+}
+
+/* TASK CARD */
+.task-card {
+  background: white; border-radius: 10px; padding: 0.7rem 0.9rem;
+  border: 1px solid var(--g100); border-left: 3px solid transparent;
+  transition: box-shadow 0.15s, transform 0.1s, border-color 0.15s;
+  cursor: pointer; position: relative;
+}
+.task-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.task-card.selected {
+  border-left-width: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  background: #FFFDF9;
+}
 .task-card.done { opacity: 0.5; }
-.task-card.overdue { border-color: #FCA5A5; border-left-color: var(--red); }
-.task-card-top { display: flex; align-items: flex-start; gap: 0.75rem; }
+.task-card.overdue { background: #FFF8F8; }
+.task-card-top { display: flex; align-items: flex-start; gap: 0.65rem; }
 .task-cb {
-  flex-shrink: 0; width: 20px; height: 20px;
-  border-radius: 5px; border: 2px solid var(--g200);
-  background: transparent; cursor: pointer;
+  flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
+  border: 2px solid var(--g200); background: transparent; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   margin-top: 2px; padding: 0; transition: all 0.2s;
 }
 .task-cb.checked { background: var(--green); border-color: var(--green); }
-.task-cb.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+.task-cb.checked::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
 .task-body { flex: 1; min-width: 0; }
-.task-title-text { font-size: 0.88rem; font-weight: 500; color: var(--navy); line-height: 1.4; }
+.task-title-text { font-size: 0.85rem; font-weight: 500; color: var(--navy); line-height: 1.4; }
 .task-card.done .task-title-text { text-decoration: line-through; color: var(--g400); }
-.task-meta { display: flex; gap: 0.35rem; margin-top: 0.3rem; flex-wrap: wrap; align-items: center; }
-.badge { font-size: 0.63rem; padding: 0.1rem 0.5rem; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+.task-meta { display: flex; gap: 0.3rem; margin-top: 0.25rem; flex-wrap: wrap; align-items: center; }
+.badge { font-size: 0.6rem; padding: 0.08rem 0.45rem; border-radius: 10px; font-weight: 600; white-space: nowrap; }
 .badge-Coppermoon { background: var(--cat-cm-bg); color: var(--cat-cm-text); }
 .badge-Recruiters { background: var(--cat-re-bg); color: var(--cat-re-text); }
 .badge-NeoSci { background: var(--cat-ns-bg); color: var(--cat-ns-text); }
@@ -196,48 +230,62 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .badge-Medium { background: #FEF3C7; color: #92400E; }
 .badge-Low { background: var(--g50); color: var(--g600); }
 .badge-Pending { background: var(--g50); color: var(--g600); }
-.badge-In.Progress, .badge-InProgress { background: #FFFBEB; color: #92400E; }
+.badge-InProgress { background: #FFFBEB; color: #92400E; }
 .badge-Completed { background: #F0FDF4; color: #065F46; }
 .badge-Assigned { background: #F5F3FF; color: var(--purple); }
-.task-due { font-size: 0.63rem; color: var(--g400); }
+.task-due { font-size: 0.62rem; color: var(--g400); }
 .task-due.overdue-text { color: var(--red); font-weight: 700; }
 .task-due.today-text { color: var(--amber); font-weight: 600; }
-.task-person { font-size: 0.63rem; color: var(--g600); }
-.task-expanded {
-  margin-top: 0.6rem; padding-top: 0.6rem;
-  border-top: 1px solid var(--g50);
-}
-.task-notes-text { font-size: 0.78rem; color: var(--g600); line-height: 1.5; margin-bottom: 0.5rem; }
-.task-acts { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.task-person-info { font-size: 0.62rem; color: var(--g600); }
 
-/* ── KANBAN ── */
-.kanban-wrap { display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; }
-.kanban-col {
-  min-width: 220px; max-width: 260px; flex-shrink: 0;
-  background: var(--g50); border-radius: 12px;
-  overflow: hidden;
+/* DETAIL PANE */
+.detail-content { padding: 1.25rem; }
+.detail-close {
+  float: right; background: var(--g50); border: none; border-radius: 6px;
+  width: 26px; height: 26px; cursor: pointer; font-size: 0.9rem; color: var(--g600);
 }
+.detail-title { font-size: 1rem; font-weight: 700; color: var(--navy); line-height: 1.4; margin-bottom: 0.75rem; padding-right: 2rem; }
+.detail-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.detail-field { margin-bottom: 0.6rem; }
+.detail-label { font-size: 0.65rem; font-weight: 700; color: var(--g400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.15rem; }
+.detail-value { font-size: 0.83rem; color: var(--g700); }
+.detail-notes { font-size: 0.8rem; color: var(--g600); line-height: 1.6; background: var(--g50); border-radius: 8px; padding: 0.6rem 0.75rem; }
+.detail-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--g100); }
+
+/* EDIT FORM IN DETAIL */
+.detail-edit input, .detail-edit select, .detail-edit textarea {
+  width: 100%; padding: 0.45rem 0.6rem; border: 1.5px solid var(--g200);
+  border-radius: 8px; font-family: inherit; font-size: 0.8rem;
+  background: white; outline: none; margin-bottom: 0.45rem;
+}
+.detail-edit input:focus, .detail-edit select:focus, .detail-edit textarea:focus { border-color: var(--copper); }
+.detail-edit .row2 { display: flex; gap: 0.4rem; }
+.detail-edit .row2 > * { flex: 1; min-width: 80px; }
+
+/* KANBAN */
+.kanban-wrap { display: flex; gap: 0.65rem; overflow-x: auto; padding: 1rem 1.25rem 1.5rem; align-items: flex-start; }
+.kanban-col { min-width: 210px; max-width: 250px; flex-shrink: 0; background: var(--g50); border-radius: 12px; overflow: hidden; }
 .kanban-col-header {
-  padding: 0.65rem 0.85rem;
-  font-size: 0.75rem; font-weight: 700;
+  padding: 0.6rem 0.8rem; font-size: 0.7rem; font-weight: 700;
   letter-spacing: 0.04em; text-transform: uppercase;
   display: flex; justify-content: space-between; align-items: center;
 }
-.kanban-col-body { padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; min-height: 80px; }
+.kanban-col-body { padding: 0.4rem; display: flex; flex-direction: column; gap: 0.35rem; min-height: 60px; }
 .kanban-card {
-  background: white; border-radius: 8px; padding: 0.55rem 0.7rem;
-  border-left: 3px solid transparent;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  background: white; border-radius: 8px; padding: 0.5rem 0.65rem;
+  border-left: 3px solid transparent; box-shadow: 0 1px 4px rgba(0,0,0,0.07);
   cursor: pointer; transition: box-shadow 0.15s, transform 0.1s;
-  font-size: 0.78rem;
+  font-size: 0.76rem; draggable: true;
 }
 .kanban-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); transform: translateY(-1px); }
-.kanban-card-title { font-weight: 500; color: var(--navy); line-height: 1.35; margin-bottom: 0.25rem; }
-.kanban-card-meta { display: flex; gap: 0.3rem; flex-wrap: wrap; align-items: center; }
-.kbadge { font-size: 0.58rem; padding: 0.08rem 0.4rem; border-radius: 8px; font-weight: 600; }
-.overdue-warn { font-size: 0.6rem; color: var(--red); font-weight: 700; }
+.kanban-card.dragging { opacity: 0.5; }
+.kanban-col-body.drag-over { background: rgba(184,115,51,0.08); border-radius: 8px; }
+.kanban-card-title { font-weight: 500; color: var(--navy); line-height: 1.3; margin-bottom: 0.2rem; }
+.kanban-card-meta { display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+.kbadge { font-size: 0.56rem; padding: 0.06rem 0.35rem; border-radius: 8px; font-weight: 600; }
+.overdue-warn { font-size: 0.58rem; color: var(--red); font-weight: 700; }
 
-/* Status column headers */
+/* Status column colors */
 .col-PastDue .kanban-col-header { background: #FEE2E2; color: var(--red); }
 .col-Pending .kanban-col-header { background: var(--g100); color: var(--g700); }
 .col-InProgress .kanban-col-header { background: #FEF3C7; color: #92400E; }
@@ -249,7 +297,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .col-Completed .kanban-card { border-left-color: var(--green); opacity: 0.7; }
 .col-Assigned .kanban-card { border-left-color: var(--purple); }
 
-/* Category column headers */
+/* Category column colors */
 .col-Coppermoon .kanban-col-header { background: var(--cat-cm-bg); color: var(--cat-cm-text); }
 .col-Recruiters .kanban-col-header { background: var(--cat-re-bg); color: var(--cat-re-text); }
 .col-NeoSci .kanban-col-header { background: var(--cat-ns-bg); color: var(--cat-ns-text); }
@@ -259,141 +307,104 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .col-NeoSci .kanban-card { border-left-color: var(--cat-ns-border); }
 .col-Personal .kanban-card { border-left-color: var(--cat-pe-border); }
 
-/* ── CALENDAR ── */
-.cal-nav { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-.cal-nav button { background: white; border: 1px solid var(--g200); border-radius: 8px; padding: 0.4rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.82rem; }
-.cal-nav h2 { font-size: 1rem; font-weight: 700; color: var(--navy); }
+/* CALENDAR */
+.cal-wrap { padding: 1rem 1.25rem; }
+.cal-nav { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem; }
+.cal-nav button { background: white; border: 1px solid var(--g200); border-radius: 8px; padding: 0.35rem 0.75rem; cursor: pointer; font-family: inherit; font-size: 0.8rem; }
+.cal-nav h2 { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
 .cal-grid-month { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
-.cal-dow { text-align: center; font-size: 0.68rem; font-weight: 700; color: var(--g400); padding: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.cal-day {
-  background: white; border-radius: 6px; min-height: 80px;
-  padding: 0.35rem; border: 1px solid var(--g100);
-  vertical-align: top; overflow: hidden;
-}
+.cal-dow { text-align: center; font-size: 0.65rem; font-weight: 700; color: var(--g400); padding: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cal-day { background: white; border-radius: 6px; min-height: 75px; padding: 0.3rem; border: 1px solid var(--g100); overflow: hidden; }
 .cal-day.other-month { background: var(--g50); opacity: 0.5; }
 .cal-day.today-day { border-color: var(--copper); border-width: 2px; }
-.cal-day-num { font-size: 0.7rem; font-weight: 600; color: var(--g600); margin-bottom: 0.2rem; }
+.cal-day-num { font-size: 0.68rem; font-weight: 600; color: var(--g600); margin-bottom: 0.15rem; }
 .cal-day.today-day .cal-day-num { color: var(--copper); }
 .cal-mini-card {
-  font-size: 0.6rem; font-weight: 500;
-  padding: 0.1rem 0.3rem; border-radius: 3px;
-  margin-bottom: 1px; cursor: pointer;
+  font-size: 0.58rem; font-weight: 500; padding: 0.08rem 0.28rem;
+  border-radius: 3px; margin-bottom: 1px; cursor: pointer;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s; border-left: 2px solid transparent;
 }
-.cal-mini-card:hover { opacity: 0.8; }
-.cal-mini-card.cat-Coppermoon { background: var(--cat-cm-bg); color: var(--cat-cm-text); border-left: 2px solid var(--cat-cm-border); }
-.cal-mini-card.cat-Recruiters { background: var(--cat-re-bg); color: var(--cat-re-text); border-left: 2px solid var(--cat-re-border); }
-.cal-mini-card.cat-NeoSci { background: var(--cat-ns-bg); color: var(--cat-ns-text); border-left: 2px solid var(--cat-ns-border); }
-.cal-mini-card.cat-Personal { background: var(--cat-pe-bg); color: var(--cat-pe-text); border-left: 2px solid var(--cat-pe-border); }
+.cal-mini-card.cat-Coppermoon { background: var(--cat-cm-bg); color: var(--cat-cm-text); border-left-color: var(--cat-cm-border); }
+.cal-mini-card.cat-Recruiters { background: var(--cat-re-bg); color: var(--cat-re-text); border-left-color: var(--cat-re-border); }
+.cal-mini-card.cat-NeoSci { background: var(--cat-ns-bg); color: var(--cat-ns-text); border-left-color: var(--cat-ns-border); }
+.cal-mini-card.cat-Personal { background: var(--cat-pe-bg); color: var(--cat-pe-text); border-left-color: var(--cat-pe-border); }
 .cal-mini-card.is-overdue { background: #FEE2E2; color: var(--red); border-left-color: var(--red); }
-
-/* Weekly cal */
+.cal-mini-card:hover { opacity: 0.8; }
 .cal-week-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
-.cal-week-col { background: white; border-radius: 8px; border: 1px solid var(--g100); min-height: 120px; overflow: hidden; }
-.cal-week-header { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--g100); }
-.cal-week-dow { font-size: 0.65rem; font-weight: 700; color: var(--g400); text-transform: uppercase; }
-.cal-week-date { font-size: 0.85rem; font-weight: 700; color: var(--navy); }
-.cal-week-col.today-col .cal-week-date { color: var(--copper); }
+.cal-week-col { background: white; border-radius: 8px; border: 1px solid var(--g100); min-height: 110px; overflow: hidden; }
 .cal-week-col.today-col { border-color: var(--copper); border-width: 2px; }
-.cal-week-body { padding: 0.3rem; display: flex; flex-direction: column; gap: 2px; }
+.cal-week-header { padding: 0.35rem 0.45rem; border-bottom: 1px solid var(--g100); }
+.cal-week-dow { font-size: 0.62rem; font-weight: 700; color: var(--g400); text-transform: uppercase; }
+.cal-week-date { font-size: 0.82rem; font-weight: 700; color: var(--navy); }
+.cal-week-col.today-col .cal-week-date { color: var(--copper); }
+.cal-week-body { padding: 0.25rem; display: flex; flex-direction: column; gap: 2px; }
+.cal-week-body .cal-mini-card { cursor: grab; }
+.cal-week-body .cal-mini-card.drag-over-card { opacity: 0.5; }
+.cal-day-drop { min-height: 60px; }
 
-/* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(12,27,42,0.6);
-  z-index: 1000; display: flex; align-items: center; justify-content: center;
-  padding: 1rem;
-  animation: fadeIn 0.15s ease;
-}
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.modal-box {
-  background: white; border-radius: 16px; max-width: 520px; width: 100%;
-  max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  animation: slideUp 0.2s ease;
-}
-@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-.modal-header {
-  padding: 1.25rem 1.25rem 0;
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
-}
-.modal-title { font-size: 1rem; font-weight: 700; color: var(--navy); line-height: 1.4; }
-.modal-close { background: var(--g50); border: none; border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 1rem; flex-shrink: 0; color: var(--g600); }
-.modal-body { padding: 1rem 1.25rem; }
-.modal-field { margin-bottom: 0.65rem; }
-.modal-label { font-size: 0.68rem; font-weight: 700; color: var(--g400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
-.modal-value { font-size: 0.85rem; color: var(--g700); }
-.modal-badges { display: flex; gap: 0.35rem; flex-wrap: wrap; }
-.modal-notes { font-size: 0.82rem; color: var(--g600); line-height: 1.6; background: var(--g50); border-radius: 8px; padding: 0.6rem 0.75rem; }
-.modal-footer { padding: 0.75rem 1.25rem 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap; border-top: 1px solid var(--g100); margin-top: 0.5rem; }
+/* EMPTY */
+.empty { text-align: center; color: var(--g400); padding: 2.5rem 1rem; font-size: 0.85rem; }
+.empty-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
 
-/* Edit form inside modal */
-.modal-edit input, .modal-edit select, .modal-edit textarea {
-  width: 100%; padding: 0.5rem 0.65rem;
-  border: 1.5px solid var(--g200); border-radius: 8px;
-  font-family: inherit; font-size: 0.82rem; background: white;
-  outline: none; transition: border 0.2s; margin-bottom: 0.5rem;
-}
-.modal-edit input:focus, .modal-edit select:focus, .modal-edit textarea:focus { border-color: var(--copper); }
-.modal-edit .form-row2 { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.modal-edit .form-row2 > * { flex: 1; min-width: 100px; }
-
-/* Listening banner */
+/* LISTEN BANNER */
 .listen-banner {
   background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px;
-  padding: 0.45rem 0.8rem; margin: 0 1.5rem 0.5rem;
-  font-size: 0.78rem; color: var(--red); font-weight: 600;
+  padding: 0.4rem 0.75rem; margin: 0 1.25rem 0.4rem;
+  font-size: 0.75rem; color: var(--red); font-weight: 600;
   display: flex; align-items: center; gap: 0.4rem;
-}
-
-/* Empty */
-.empty { text-align: center; color: var(--g400); padding: 3rem 1rem; font-size: 0.88rem; }
-.empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-
-/* Sort bar for list */
-.sort-bar { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem; font-size: 0.75rem; color: var(--g400); flex-wrap: wrap; }
-.sort-btn { background: white; border: 1px solid var(--g200); border-radius: 6px; padding: 0.2rem 0.55rem; cursor: pointer; font-family: inherit; font-size: 0.72rem; color: var(--g600); transition: all 0.15s; }
-.sort-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
-
-@media(max-width:640px) {
-  .topbar { padding: 0.6rem 1rem; }
-  .content { padding: 1rem; }
-  .kanban-wrap { gap: 0.5rem; }
-  .kanban-col { min-width: 180px; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="topbar-left">
-    <img src="coppermoon-logo-nav.png" alt="Coppermoon" onerror="this.style.display='none'">
-    <h1>Tasks</h1>
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen">
+  <img src="coppermoon-logo-nav.png" alt="Coppermoon" onerror="this.style.display='none'">
+  <h2>Coppermoon Tasks</h2>
+  <div id="pw-form">
+    <input type="password" id="pw-input" placeholder="Password" />
+    <button id="pw-btn" onclick="checkPw()">Enter</button>
   </div>
-  <div class="topbar-right" id="topbar-right"></div>
+  <div id="pw-error">Incorrect password</div>
 </div>
 
-<!-- STATS BAR -->
-<div class="statsbar" id="statsbar"></div>
-
-<!-- VIEW TABS -->
-<div class="view-tabs" id="view-tabs"></div>
-
-<!-- LISTENING BANNER -->
-<div class="listen-banner" id="listen-banner" style="display:none">🎤 Listening… speak your task title</div>
-
-<!-- TOOLBAR -->
-<div class="toolbar" id="toolbar"></div>
-
-<!-- CONTENT -->
-<div class="content" id="content"></div>
-
-<!-- MODAL -->
-<div id="modal-overlay" style="display:none"></div>
+<!-- APP (hidden until pw) -->
+<div id="app" style="display:none">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="coppermoon-logo-nav.png" alt="Coppermoon" onerror="this.style.display='none'">
+      <h1>Tasks</h1>
+    </div>
+    <div class="topbar-right" id="topbar-right"></div>
+  </div>
+  <div class="statsbar" id="statsbar"></div>
+  <div class="view-tabs" id="view-tabs"></div>
+  <div class="listen-banner" id="listen-banner" style="display:none">🎤 Listening… speak your task title</div>
+  <div class="toolbar" id="toolbar"></div>
+  <div id="main-content"></div>
+</div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
+// ─── PASSWORD ────────────────────────────────────────────────────────────────
+const PW = 'copper2026';
+function checkPw() {
+  const v = document.getElementById('pw-input').value;
+  if(v === PW) {
+    document.getElementById('pw-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && document.getElementById('pw-screen').style.display !== 'none') checkPw();
+});
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
 const CATS = ['Coppermoon','Recruiters','NeoSci','Personal'];
 const PRIS = ['High','Medium','Low'];
 const STATS = ['Pending','In Progress','Completed','Assigned'];
@@ -401,115 +412,73 @@ const SK = 'cm_tasks_v3';
 const TODAY = new Date().toISOString().split('T')[0];
 
 const DEFAULTS = [
-  {id:'1',title:'Update Coppermoon website with info@coppermoon.io email',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-14',time:'',person:'',company:'',notes:'Add Google Voice number too',done:false,created:'2026-03-12'},
-  {id:'2',title:'Add data obfuscation to assessment framework compliance section',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-14',time:'',person:'',company:'',notes:'Section 13: Data Security & Governance - test data with real PII',done:false,created:'2026-03-14'},
-  {id:'3',title:'Contact America First CU interviewer from last year',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-14',time:'',person:'',company:'America First CU',notes:'',done:false,created:'2026-03-14'},
-  {id:'4',title:'Follow up on VITU submission with Kumar',category:'Recruiters',priority:'High',status:'In Progress',due:'2026-03-17',time:'',person:'Kumar Aditya',company:'VITU',notes:'kumar.Aditya@realtechservices.co - $85/hr 1099',done:false,created:'2026-03-13'},
-  {id:'5',title:'Monitor Wells Fargo Auto Lending SME via Kavya',category:'Recruiters',priority:'Medium',status:'Pending',due:'2026-03-17',time:'',person:'Kavya G',company:'Wells Fargo',notes:'kavya.g@sritechsolutions.com - $75/hr W2',done:false,created:'2026-03-13'},
-  {id:'6',title:'Send M&A outreach emails - RED targets',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-15',time:'',person:'',company:'ENB, ELGA, First Community, Park National',notes:'Use post-acquisition template. Targets loaded in HubSpot.',done:false,created:'2026-03-14'},
-  {id:'7',title:'Send M&A outreach emails - YELLOW targets',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-17',time:'',person:'',company:'Arrow Financial, Fulton, Community West',notes:'Use pre-acquisition template',done:false,created:'2026-03-14'},
-  {id:'8',title:'Set up Google Voice number for Coppermoon',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-15',time:'',person:'',company:'',notes:'Free, separate from personal 801 number',done:false,created:'2026-03-12'},
-  {id:'9',title:'Fix Formspree redirect to thank-you.html',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-17',time:'',person:'',company:'',notes:'In Formspree dashboard settings',done:false,created:'2026-03-11'},
-  {id:'10',title:'NeoSci - send faxes to MDs for Matt',category:'NeoSci',priority:'Low',status:'Pending',due:'2026-03-17',time:'',person:'Matt Longson',company:'NeoSci',notes:'Maintenance mode while focusing on Coppermoon',done:false,created:'2026-03-13'},
-  {id:'11',title:'Set up Google Alerts for bank M&A (UT, ID, WY, CO, AZ, NV)',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-17',time:'',person:'',company:'',notes:'',done:false,created:'2026-03-11'},
-  {id:'12',title:'Re-contact first batch of 13 outreach emails',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-27',time:'',person:'',company:'',notes:'2 week follow-up on emails sent Mar 13',done:false,created:'2026-03-13'},
-  {id:'13',title:'Record first LinkedIn video (15-30 sec)',category:'Coppermoon',priority:'Low',status:'Pending',due:'2026-03-21',time:'',person:'',company:'',notes:'Campaign: Lack of pre-assessment will cost money',done:false,created:'2026-03-11'},
-  {id:'14',title:'Send reconnection email to First Financial Bancshares',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-16',time:'',person:'Scott Dueser',company:'First Financial Bancshares',notes:'Scott Dueser (Chairman), David Bailey (new CEO), Tim Brown (new CIO). $15.45B, Abilene TX.',done:false,created:'2026-03-15'},
+  {id:'1',title:'Follow up on VITU submission with Tom Laubert',category:'Recruiters',priority:'High',status:'In Progress',due:'2026-03-19',time:'',person:'Tom Laubert',company:'VITU',notes:'$85/hr 1099 - interview invite pending',done:false,created:'2026-03-18'},
+  {id:'2',title:'Prepare for VITU interview',category:'Recruiters',priority:'High',status:'Pending',due:'2026-03-20',time:'',person:'Tom Laubert',company:'VITU',notes:'Senior FinTech PM - core banking integrations, Dealertrack, RouteOne',done:false,created:'2026-03-19'},
+  {id:'3',title:'Monitor Wells Fargo Auto Lending SME response',category:'Recruiters',priority:'Medium',status:'Pending',due:'2026-03-21',time:'',person:'Kavya G',company:'Wells Fargo',notes:'$75/hr W2 - submitted',done:false,created:'2026-03-18'},
+  {id:'4',title:'Aspire Systems call - BFS Domain Consultant',category:'Recruiters',priority:'High',status:'Pending',due:'2026-03-20',time:'',person:'Jayaraj Velusamy',company:'Aspire Systems',notes:'$170-180K remote - call being scheduled',done:false,created:'2026-03-19'},
+  {id:'5',title:'Fix Formspree contact form on coppermoon.io',category:'Coppermoon',priority:'Medium',status:'Pending',due:'2026-03-21',time:'',person:'',company:'',notes:'Redirect to thank-you.html after submit',done:false,created:'2026-03-11'},
+  {id:'6',title:'Send M&A outreach - Huntington/Cadence Bank',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-19',time:'',person:'Kendall Kowalski',company:'Huntington Bancshares',notes:'kendall.kowalski@huntington.com - Cadence closed Feb 1 2026',done:false,created:'2026-03-19'},
+  {id:'7',title:'Send M&A outreach - Old National/Bremer Bank',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-19',time:'',person:'Matt Keen',company:'Old National Bancorp',notes:'CIO - Bremer $16.3B integration active',done:false,created:'2026-03-19'},
+  {id:'8',title:'Finish n8n outreach workflow',category:'Coppermoon',priority:'High',status:'In Progress',due:'2026-03-19',time:'',person:'',company:'',notes:'Add follow-up task creation, template selector, wait nodes',done:false,created:'2026-03-19'},
+  {id:'9',title:'Set up 15 outreach contacts in HubSpot daily',category:'Coppermoon',priority:'High',status:'Pending',due:'2026-03-19',time:'',person:'',company:'',notes:'Tag with Contact Type + Message Template + Outreach Status',done:false,created:'2026-03-19'},
+  {id:'10',title:'NeoSci compensation agreement with Matt Longson',category:'NeoSci',priority:'Medium',status:'Pending',due:'2026-03-25',time:'',person:'Matt Longson',company:'NeoSci',notes:'Four tiers: site signing, first study CTA, setup package, $500K milestone',done:false,created:'2026-03-13'},
 ];
 
-// ─── STATE ──────────────────────────────────────────────────────────────────
 let tasks = [];
-let view = 'list'; // list | weekly | monthly | kanban-status | kanban-cat
+let view = 'list';
 let filterCat = 'All';
 let search = '';
-let sortBy = 'priority'; // priority | due | status | person | company | category
+let sortBy = 'priority';
 let sortDir = 1;
 let showForm = false;
-let editId = null;
-let form = {title:'',category:'Coppermoon',priority:'Medium',status:'Pending',due:TODAY,time:'',person:'',company:'',notes:''};
+let selectedId = null;
+let detailEditing = false;
 let listening = false;
 let calDate = new Date();
 let recognition = null;
+let dragId = null;
 
-// ─── STORAGE ────────────────────────────────────────────────────────────────
 function load() {
   try {
     const s = localStorage.getItem(SK);
     tasks = s ? JSON.parse(s) : DEFAULTS.map(t=>({...t}));
   } catch { tasks = DEFAULTS.map(t=>({...t})); }
-  // Migrate old tasks missing new fields
-  tasks = tasks.map(t => ({
-    status: 'Pending', time:'', person:'', company:'',
-    ...t
-  }));
+  tasks = tasks.map(t => ({status:'Pending',time:'',person:'',company:'',...t}));
 }
-function save() {
-  try { localStorage.setItem(SK, JSON.stringify(tasks)); } catch {}
-}
+function save() { try { localStorage.setItem(SK, JSON.stringify(tasks)); } catch {} }
 
-// ─── HELPERS ────────────────────────────────────────────────────────────────
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function genId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-function esc(s) {
-  if(!s) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
+function esc(s) { if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function daysBetween(d1,d2) { return Math.round((new Date(d1)-new Date(d2))/86400000); }
-function formatDate(d) {
-  if(!d) return '';
-  return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
-}
-function formatDateLong(d) {
-  if(!d) return '';
-  return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-}
+function formatDate(d) { if(!d)return''; return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function formatDateLong(d) { if(!d)return''; return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}); }
 function gcalUrl(t) {
   const d=(t.due||TODAY).replace(/-/g,'');
   const title=encodeURIComponent(t.title);
-  const det=encodeURIComponent('Category: '+t.category+'\nPriority: '+t.priority+'\nStatus: '+t.status+'\n'+(t.notes||''));
-  if(t.time){
-    const [h,m]=t.time.split(':');
-    const eh=(parseInt(h)+1).toString().padStart(2,'0');
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}T${h}${m}00/${d}T${eh}${m}00&details=${det}&ctz=America/Denver`;
-  }
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}/${d}&details=${det}`;
+  const det=encodeURIComponent('Category: '+t.category+'\nPriority: '+t.priority+'\n'+(t.notes||''));
+  if(t.time){const[h,m]=t.time.split(':');const eh=(parseInt(h)+1).toString().padStart(2,'0');return`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}T${h}${m}00/${d}T${eh}${m}00&details=${det}&ctz=America/Denver`;}
+  return`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}/${d}&details=${det}`;
 }
-
-function isOverdueTask(t) { return !t.done && t.status!=='Completed' && t.due && t.due < TODAY; }
-function isDueTodayTask(t) { return !t.done && t.status!=='Completed' && t.due === TODAY; }
-
+function isOver(t) { return !t.done && t.status!=='Completed' && t.due && t.due < TODAY; }
+function isToday(t) { return !t.done && t.status!=='Completed' && t.due === TODAY; }
+function catKey(c) { return c==='Coppermoon'?'cm':c==='Recruiters'?'re':c==='NeoSci'?'ns':'pe'; }
 function dueLabel(t) {
   if(!t.due) return '';
   const days = daysBetween(t.due, TODAY);
-  if(isOverdueTask(t)) return `${Math.abs(days)}d overdue · ${formatDate(t.due)}`;
-  if(isDueTodayTask(t)) return `Due today`;
+  if(isOver(t)) return `${Math.abs(days)}d overdue · ${formatDate(t.due)}`;
+  if(isToday(t)) return 'Due today';
   if(days<=7) return `${days}d · ${formatDate(t.due)}`;
   return formatDate(t.due);
 }
+function dueCls(t) { if(isOver(t))return 'overdue-text'; if(isToday(t))return 'today-text'; return ''; }
 
-function dueCls(t) {
-  if(isOverdueTask(t)) return 'overdue-text';
-  if(isDueTodayTask(t)) return 'today-text';
-  return '';
-}
-
-// ─── FILTERING & SORTING ────────────────────────────────────────────────────
 function applyFilters(list) {
   let f = list;
-  if(filterCat !== 'All') f = f.filter(t=>t.category===filterCat);
-  if(search.trim()) {
-    const q=search.toLowerCase();
-    f = f.filter(t=>
-      t.title.toLowerCase().includes(q)||
-      (t.notes&&t.notes.toLowerCase().includes(q))||
-      t.category.toLowerCase().includes(q)||
-      (t.person&&t.person.toLowerCase().includes(q))||
-      (t.company&&t.company.toLowerCase().includes(q))||
-      t.status.toLowerCase().includes(q)
-    );
-  }
+  if(filterCat!=='All') f=f.filter(t=>t.category===filterCat);
+  if(search.trim()){const q=search.toLowerCase();f=f.filter(t=>t.title.toLowerCase().includes(q)||(t.notes&&t.notes.toLowerCase().includes(q))||(t.person&&t.person.toLowerCase().includes(q))||(t.company&&t.company.toLowerCase().includes(q))||t.category.toLowerCase().includes(q)||t.status.toLowerCase().includes(q));}
   return f;
 }
-
 function sortTasks(list) {
   const po={High:0,Medium:1,Low:2};
   return [...list].sort((a,b)=>{
@@ -520,206 +489,105 @@ function sortTasks(list) {
     else if(sortBy==='person'){av=a.person||'';bv=b.person||'';}
     else if(sortBy==='company'){av=a.company||'';bv=b.company||'';}
     else if(sortBy==='category'){av=a.category||'';bv=b.category||'';}
-    else {av=po[a.priority]||1;bv=po[b.priority]||1;}
-    if(av<bv) return -1*sortDir;
-    if(av>bv) return 1*sortDir;
-    // secondary: overdue first
-    const ao=isOverdueTask(a)?0:1, bo=isOverdueTask(b)?0:1;
-    if(ao!==bo) return ao-bo;
-    return (a.due||'9999')<(b.due||'9999')?-1:1;
+    else{av=po[a.priority]||1;bv=po[b.priority]||1;}
+    if(av<bv)return-1*sortDir;if(av>bv)return 1*sortDir;
+    const ao=isOver(a)?0:1,bo=isOver(b)?0:1;if(ao!==bo)return ao-bo;
+    return(a.due||'9999')<(b.due||'9999')?-1:1;
   });
 }
 
-// ─── ACTIONS ────────────────────────────────────────────────────────────────
-function getFormVals() {
-  return {
-    title: (document.getElementById('f-title')||{}).value||'',
-    category: (document.getElementById('f-cat')||{}).value||'Coppermoon',
-    priority: (document.getElementById('f-pri')||{}).value||'Medium',
-    status: (document.getElementById('f-stat')||{}).value||'Pending',
-    due: (document.getElementById('f-due')||{}).value||TODAY,
-    time: (document.getElementById('f-time')||{}).value||'',
-    person: (document.getElementById('f-person')||{}).value||'',
-    company: (document.getElementById('f-company')||{}).value||'',
-    notes: (document.getElementById('f-notes')||{}).value||''
-  };
-}
-
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
 function addTask() {
-  const v=getFormVals();
-  if(!v.title.trim()) return;
-  tasks.unshift({id:genId(),...v,done:false,created:TODAY});
-  save(); showForm=false; editId=null;
-  form={title:'',category:'Coppermoon',priority:'Medium',status:'Pending',due:TODAY,time:'',person:'',company:'',notes:''};
-  render();
-}
-
-function saveEdit() {
-  const v=getFormVals();
-  if(!v.title.trim()) return;
-  tasks=tasks.map(t=>t.id===editId?{...t,...v}:t);
-  save(); closeModal(); editId=null; render();
+  const title=(document.getElementById('f-title')||{}).value||'';
+  if(!title.trim()) return;
+  const t = {
+    id:genId(),
+    title:title.trim(),
+    category:(document.getElementById('f-cat')||{}).value||'Coppermoon',
+    priority:(document.getElementById('f-pri')||{}).value||'Medium',
+    status:(document.getElementById('f-stat')||{}).value||'Pending',
+    due:(document.getElementById('f-due')||{}).value||TODAY,
+    time:(document.getElementById('f-time')||{}).value||'',
+    person:(document.getElementById('f-person')||{}).value||'',
+    company:(document.getElementById('f-company')||{}).value||'',
+    notes:(document.getElementById('f-notes')||{}).value||'',
+    done:false, created:TODAY
+  };
+  tasks.unshift(t);
+  save(); showForm=false; selectedId=t.id; render();
 }
 
 function toggleDone(id, e) {
   if(e) e.stopPropagation();
   tasks=tasks.map(t=>{
-    if(t.id!==id) return t;
+    if(t.id!==id)return t;
     const done=!t.done;
-    return {...t,done,status:done?'Completed':t.status==='Completed'?'Pending':t.status};
+    return{...t,done,status:done?'Completed':t.status==='Completed'?'Pending':t.status};
   });
   save(); render();
-  // also re-render modal if open
-  const mo=document.getElementById('modal-overlay');
-  if(mo&&mo.style.display!=='none') {
-    const t=tasks.find(x=>x.id===id);
-    if(t) openModal(id);
-  }
 }
 
-function deleteTask(id, e) {
-  if(e) e.stopPropagation();
-  if(!confirm('Delete this task?')) return;
+function deleteTask(id) {
+  if(!confirm('Delete this task?'))return;
   tasks=tasks.filter(t=>t.id!==id);
-  save(); closeModal(); render();
+  if(selectedId===id)selectedId=null;
+  save(); render();
 }
 
-// ─── VOICE ──────────────────────────────────────────────────────────────────
+function selectTask(id) {
+  selectedId = selectedId===id ? null : id;
+  detailEditing = false;
+  render();
+}
+
+function saveDetailEdit(id) {
+  const title=(document.getElementById('de-title')||{}).value||'';
+  if(!title.trim())return;
+  tasks=tasks.map(t=>{
+    if(t.id!==id)return t;
+    return{...t,
+      title:title.trim(),
+      category:(document.getElementById('de-cat')||{}).value||t.category,
+      priority:(document.getElementById('de-pri')||{}).value||t.priority,
+      status:(document.getElementById('de-stat')||{}).value||t.status,
+      due:(document.getElementById('de-due')||{}).value||t.due,
+      time:(document.getElementById('de-time')||{}).value||'',
+      person:(document.getElementById('de-person')||{}).value||'',
+      company:(document.getElementById('de-company')||{}).value||'',
+      notes:(document.getElementById('de-notes')||{}).value||''
+    };
+  });
+  save(); detailEditing=false; render();
+}
+
+// ─── VOICE ───────────────────────────────────────────────────────────────────
 function startVoice() {
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert('Voice input requires Chrome or Edge.');return;}
-  recognition=new SR();
-  recognition.lang='en-US';
+  recognition=new SR();recognition.lang='en-US';
   recognition.onstart=()=>{listening=true;render();}
   recognition.onend=()=>{listening=false;render();}
   recognition.onerror=()=>{listening=false;render();}
   recognition.onresult=(e)=>{
     const txt=e.results[0][0].transcript;
-    form={...form,title:txt};
-    showForm=true; render();
-    setTimeout(()=>{const el=document.getElementById('f-title');if(el)el.focus();},100);
+    showForm=true;render();
+    setTimeout(()=>{const el=document.getElementById('f-title');if(el){el.value=txt;el.focus();}},100);
   };
   recognition.start();
 }
-function stopVoice() { if(recognition)recognition.stop(); listening=false; render(); }
+function stopVoice(){if(recognition)recognition.stop();listening=false;render();}
 
-// ─── MODAL ──────────────────────────────────────────────────────────────────
-let modalTaskId=null;
-let modalEditing=false;
-
-function openModal(id) {
-  modalTaskId=id; modalEditing=false;
-  renderModal();
-  document.getElementById('modal-overlay').style.display='flex';
-}
-function closeModal() {
-  document.getElementById('modal-overlay').style.display='none';
-  modalTaskId=null; modalEditing=false;
-}
-function startModalEdit() { modalEditing=true; renderModal(); }
-
-function renderModal() {
-  const t=tasks.find(x=>x.id===modalTaskId);
-  if(!t){closeModal();return;}
-  const over=isOverdueTask(t);
-  let html='<div class="modal-box">';
-  html+='<div class="modal-header">';
-  html+=`<div class="modal-title">${esc(t.title)}</div>`;
-  html+='<button class="modal-close" onclick="closeModal()">✕</button>';
-  html+='</div>';
-
-  if(modalEditing){
-    html+='<div class="modal-body modal-edit">';
-    html+=`<input type="text" id="me-title" value="${esc(t.title)}" placeholder="Task title..." />`;
-    html+='<div class="form-row2">';
-    html+=`<select id="me-cat">${CATS.map(c=>`<option${t.category===c?' selected':''}>${c}</option>`).join('')}</select>`;
-    html+=`<select id="me-pri">${PRIS.map(p=>`<option${t.priority===p?' selected':''}>${p}</option>`).join('')}</select>`;
-    html+=`<select id="me-stat">${STATS.map(s=>`<option${t.status===s?' selected':''}>${s}</option>`).join('')}</select>`;
-    html+='</div>';
-    html+='<div class="form-row2">';
-    html+=`<input type="date" id="me-due" value="${t.due||''}" />`;
-    html+=`<input type="time" id="me-time" value="${t.time||''}" />`;
-    html+='</div>';
-    html+='<div class="form-row2">';
-    html+=`<input type="text" id="me-person" value="${esc(t.person||'')}" placeholder="Associated person..." />`;
-    html+=`<input type="text" id="me-company" value="${esc(t.company||'')}" placeholder="Associated company..." />`;
-    html+='</div>';
-    html+=`<textarea id="me-notes" rows="3" placeholder="Notes...">${esc(t.notes||'')}</textarea>`;
-    html+='</div>';
-    html+='<div class="modal-footer">';
-    html+=`<button class="btn btn-primary" onclick="saveModalEdit('${t.id}')">Save</button>`;
-    html+=`<button class="btn btn-ghost" onclick="modalEditing=false;renderModal()">Cancel</button>`;
-    html+='</div>';
-  } else {
-    html+='<div class="modal-body">';
-    html+='<div class="modal-badges" style="margin-bottom:0.75rem;">';
-    html+=`<span class="badge badge-${t.category}">${t.category}</span>`;
-    html+=`<span class="badge badge-${t.priority}">${t.priority}</span>`;
-    html+=`<span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>`;
-    if(over) html+=`<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due,TODAY))}d overdue</span>`;
-    html+='</div>';
-    if(t.due){
-      html+=`<div class="modal-field"><div class="modal-label">Due</div><div class="modal-value">${formatDateLong(t.due)}${t.time?' @ '+t.time:''}</div></div>`;
-    }
-    if(t.person){
-      html+=`<div class="modal-field"><div class="modal-label">Person</div><div class="modal-value">${esc(t.person)}</div></div>`;
-    }
-    if(t.company){
-      html+=`<div class="modal-field"><div class="modal-label">Company</div><div class="modal-value">${esc(t.company)}</div></div>`;
-    }
-    if(t.notes){
-      html+=`<div class="modal-field"><div class="modal-label">Notes</div><div class="modal-notes">${esc(t.notes)}</div></div>`;
-    }
-    html+='</div>';
-    html+='<div class="modal-footer">';
-    const cbLabel=t.done?'Mark Incomplete':'Mark Complete';
-    html+=`<button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null)">${cbLabel}</button>`;
-    html+=`<button class="btn btn-ghost" onclick="startModalEdit()">Edit</button>`;
-    html+=`<a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Calendar</a>`;
-    html+=`<button class="btn btn-danger" onclick="deleteTask('${t.id}',null)">Delete</button>`;
-    html+='</div>';
-  }
-  html+='</div>';
-  const mo=document.getElementById('modal-overlay');
-  mo.innerHTML=html;
-  mo.onclick=function(e){if(e.target===mo)closeModal();};
-}
-
-function saveModalEdit(id) {
-  const t=tasks.find(x=>x.id===id);
-  if(!t) return;
-  const title=(document.getElementById('me-title')||{}).value||'';
-  if(!title.trim()) return;
-  Object.assign(t,{
-    title:title.trim(),
-    category:(document.getElementById('me-cat')||{}).value||t.category,
-    priority:(document.getElementById('me-pri')||{}).value||t.priority,
-    status:(document.getElementById('me-stat')||{}).value||t.status,
-    due:(document.getElementById('me-due')||{}).value||t.due,
-    time:(document.getElementById('me-time')||{}).value||'',
-    person:(document.getElementById('me-person')||{}).value||'',
-    company:(document.getElementById('me-company')||{}).value||'',
-    notes:(document.getElementById('me-notes')||{}).value||''
-  });
-  save(); modalEditing=false; renderModal(); render();
-}
-
-// ─── RENDER ─────────────────────────────────────────────────────────────────
+// ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
-  renderTopbar();
-  renderStats();
-  renderViewTabs();
-  renderListenBanner();
-  renderToolbar();
-  renderContent();
+  renderTopbar(); renderStats(); renderViewTabs(); renderListenBanner(); renderToolbar(); renderMainContent();
 }
 
 function renderTopbar() {
-  document.getElementById('topbar-right').innerHTML=
-    `<button class="btn btn-mic${listening?' listening':''}" onclick="${listening?'stopVoice()':'startVoice()'}">
-      ${listening?'⏹ Stop':'🎤 Voice'}
+  document.getElementById('topbar-right').innerHTML=`
+    <button class="btn btn-mic${listening?' listening':''}" onclick="${listening?'stopVoice()':'startVoice()'}">
+      ${listening?'⏹':'🎤'} ${listening?'Stop':'Voice'}
     </button>
-    <button class="btn btn-primary" onclick="showForm=!showForm;if(!showForm)editId=null;render()">
+    <button class="btn btn-primary" onclick="showForm=!showForm;if(!showForm&&!selectedId)render();else render()">
       ${showForm?'✕ Cancel':'+ Add Task'}
     </button>`;
 }
@@ -727,24 +595,21 @@ function renderTopbar() {
 function renderStats() {
   const active=tasks.filter(t=>!t.done&&t.status!=='Completed');
   const done=tasks.filter(t=>t.done||t.status==='Completed');
-  const over=active.filter(t=>isOverdueTask(t));
-  const tod=active.filter(t=>isDueTodayTask(t));
+  const over=active.filter(t=>isOver(t));
+  const tod=active.filter(t=>isToday(t));
   let h='';
   if(over.length) h+=`<span class="overdue">${over.length} overdue</span>`;
   if(over.length&&tod.length) h+=' · ';
-  if(tod.length) h+=`<span class="today">${tod.length} due today</span>`;
+  if(tod.length) h+=`<span class="today-stat">${tod.length} due today</span>`;
   if(!over.length&&!tod.length) h+='<span>All clear</span>';
-  h+=` · ${active.length} active · ${done.length} done`;
+  h+=` · ${active.length} active · ${done.length} completed`;
   document.getElementById('statsbar').innerHTML=h;
 }
 
 function renderViewTabs() {
-  const views=[
-    ['list','☰ List'],['weekly','📅 Weekly'],['monthly','🗓 Monthly'],
-    ['kanban-status','⬜ By Status'],['kanban-cat','🏷 By Category']
-  ];
+  const views=[['list','☰ List'],['weekly','📅 Weekly'],['monthly','🗓 Monthly'],['kanban-status','⬜ By Status'],['kanban-cat','🏷 By Category']];
   document.getElementById('view-tabs').innerHTML=views.map(([k,l])=>
-    `<button class="view-tab${view===k?' active':''}" onclick="view='${k}';render()">${l}</button>`
+    `<button class="view-tab${view===k?' active':''}" onclick="view='${k}';selectedId=null;render()">${l}</button>`
   ).join('');
 }
 
@@ -753,141 +618,175 @@ function renderListenBanner() {
 }
 
 function renderToolbar() {
-  let h='';
-  // Search
-  h+=`<div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="search-inp" placeholder="Search tasks..." value="${esc(search)}" oninput="search=this.value;render()" />
-    ${search?`<button class="search-clear" onclick="search='';render()">✕</button>`:''}
-  </div>`;
-  // Category filters
+  let h=`<div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search tasks..." value="${esc(search)}" oninput="search=this.value;render()" /></div>`;
+  h+=`<div class="sort-wrap"><label>Sort:</label><select class="sort-select" onchange="sortBy=this.value;render()">`;
+  [['priority','Priority'],['due','Due Date'],['status','Status'],['category','Category'],['person','Person'],['company','Company']].forEach(([k,l])=>{
+    h+=`<option value="${k}"${sortBy===k?' selected':''}>${l}</option>`;
+  });
+  h+=`</select></div>`;
   h+='<div class="cat-filters">';
   ['All',...CATS].forEach(c=>{
-    const active=filterCat===c;
-    h+=`<button class="cat-btn${active?' active-'+c:''}" onclick="filterCat='${c}';render()">${c}</button>`;
+    h+=`<button class="cat-btn${filterCat===c?' active-'+c:''}" onclick="filterCat='${c}';render()">${c}</button>`;
   });
   h+='</div>';
   document.getElementById('toolbar').innerHTML=h;
 }
 
-function renderContent() {
-  if(view==='list') renderList();
-  else if(view==='weekly') renderWeekly();
-  else if(view==='monthly') renderMonthly();
-  else if(view==='kanban-status') renderKanban('status');
-  else if(view==='kanban-cat') renderKanban('cat');
+function renderMainContent() {
+  const mc=document.getElementById('main-content');
+  if(view==='list') mc.innerHTML=renderListView();
+  else if(view==='weekly') mc.innerHTML=`<div class="cal-wrap">${renderWeekly()}</div>`;
+  else if(view==='monthly') mc.innerHTML=`<div class="cal-wrap">${renderMonthly()}</div>`;
+  else if(view==='kanban-status') mc.innerHTML=renderKanban('status');
+  else if(view==='kanban-cat') mc.innerHTML=renderKanban('cat');
 }
 
 // ── LIST VIEW ──
-function renderList() {
-  let active=tasks.filter(t=>!t.done&&t.status!=='Completed');
-  let done=tasks.filter(t=>t.done||t.status==='Completed');
-  active=sortTasks(applyFilters(active));
-  done=applyFilters(done);
+function renderListView() {
+  let active=sortTasks(applyFilters(tasks.filter(t=>!t.done&&t.status!=='Completed')));
+  let done=applyFilters(tasks.filter(t=>t.done||t.status==='Completed'));
+  const hasSel=selectedId&&tasks.find(t=>t.id===selectedId);
 
-  let h='';
-
-  // Add task form
-  if(showForm) h+=renderForm();
-
-  // Sort bar
-  const sorts=[['priority','Priority'],['due','Due Date'],['status','Status'],['category','Category'],['person','Person'],['company','Company']];
-  h+=`<div class="sort-bar"><span>Sort by:</span>`;
-  sorts.forEach(([k,l])=>{
-    const a=sortBy===k;
-    h+=`<button class="sort-btn${a?' active':''}" onclick="sortBy='${k}';sortDir=${sortBy===k?-sortDir:1};render()">${l}${a?(sortDir===1?' ↑':' ↓'):''}</button>`;
-  });
-  h+='</div>';
-
-  // Task list
-  h+='<div class="task-list">';
-  if(search&&active.length===0&&done.length===0){
-    h+=`<div class="empty"><div class="empty-icon">🔍</div>No tasks match "${esc(search)}"</div>`;
-  } else {
-    if(active.length===0&&!search){
-      h+=`<div class="empty"><div class="empty-icon">✅</div>All clear! No active tasks.</div>`;
-    }
-    active.forEach(t=>{ h+=renderTaskCard(t); });
-    if(done.length>0){
-      h+=`<div style="font-size:0.72rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;padding:0.75rem 0 0.25rem">Completed (${done.length})</div>`;
-      done.forEach(t=>{ h+=renderTaskCard(t); });
-    }
+  let listH='';
+  if(showForm) listH+=renderForm();
+  listH+='<div class="task-list">';
+  if(active.length===0&&!search) listH+=`<div class="empty"><div class="empty-icon">✅</div>All clear!</div>`;
+  active.forEach(t=>{ listH+=renderTaskCard(t); });
+  if(done.length>0){
+    listH+=`<div class="section-header">Completed <span class="count">${done.length}</span></div>`;
+    done.forEach(t=>{ listH+=renderTaskCard(t); });
   }
-  h+='</div>';
-  document.getElementById('content').innerHTML=h;
+  listH+='</div>';
+
+  let detailH='';
+  if(hasSel){
+    const t=tasks.find(x=>x.id===selectedId);
+    detailH=renderDetailPane(t);
+  }
+
+  return `<div class="main-layout">
+    <div class="list-pane${hasSel?' with-detail':''}">${listH}</div>
+    <div class="detail-pane${hasSel?' open':''}">${detailH}</div>
+  </div>`;
 }
 
 function renderTaskCard(t) {
-  const over=isOverdueTask(t);
+  const over=isOver(t);
   const dl=dueLabel(t);
   const dc=dueCls(t);
-  const catCls='border-'+t.category.replace(/\s/g,'-');
-  let h=`<div class="task-card${t.done?' done':''}${over?' overdue':''} border-${t.category}" style="border-left-color:var(--cat-${t.category==='Coppermoon'?'cm':t.category==='Recruiters'?'re':t.category==='NeoSci'?'ns':'pe'}-border)">`;
-  h+=`<div class="task-card-top">`;
-  h+=`<button class="task-cb${t.done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>`;
-  h+=`<div class="task-body" onclick="openModal('${t.id}')">`;
-  h+=`<div class="task-title-text">${esc(t.title)}</div>`;
-  h+=`<div class="task-meta">`;
-  h+=`<span class="badge badge-${t.category}">${t.category}</span>`;
-  h+=`<span class="badge badge-${t.priority}">${t.priority}</span>`;
-  h+=`<span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>`;
-  if(dl) h+=`<span class="task-due ${dc}">${esc(dl)}</span>`;
-  if(t.person) h+=`<span class="task-person">👤 ${esc(t.person)}</span>`;
-  if(t.company) h+=`<span class="task-person">🏢 ${esc(t.company)}</span>`;
-  h+=`</div></div></div></div>`;
-  return h;
+  const ck=catKey(t.category);
+  const sel=selectedId===t.id;
+  return `<div class="task-card${t.done?' done':''}${over?' overdue':''}${sel?' selected':''}" 
+    style="border-left-color:var(--cat-${ck}-border)" onclick="selectTask('${t.id}')">
+    <div class="task-card-top">
+      <button class="task-cb${t.done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
+      <div class="task-body">
+        <div class="task-title-text">${esc(t.title)}</div>
+        <div class="task-meta">
+          <span class="badge badge-${t.category}">${t.category}</span>
+          <span class="badge badge-${t.priority}">${t.priority}</span>
+          <span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>
+          ${dl?`<span class="task-due ${dc}">${esc(dl)}</span>`:''}
+          ${t.person?`<span class="task-person-info">👤 ${esc(t.person)}</span>`:''}
+          ${t.company?`<span class="task-person-info">🏢 ${esc(t.company)}</span>`:''}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderDetailPane(t) {
+  const over=isOver(t);
+  if(detailEditing) {
+    return `<div class="detail-content">
+      <button class="detail-close" onclick="detailEditing=false;render()">✕</button>
+      <div class="detail-title" style="margin-bottom:0.75rem">Edit Task</div>
+      <div class="detail-edit">
+        <input type="text" id="de-title" value="${esc(t.title)}" placeholder="Task title..." />
+        <div class="row2">
+          <select id="de-cat">${CATS.map(c=>`<option${t.category===c?' selected':''}>${c}</option>`).join('')}</select>
+          <select id="de-pri">${PRIS.map(p=>`<option${t.priority===p?' selected':''}>${p}</option>`).join('')}</select>
+        </div>
+        <select id="de-stat">${STATS.map(s=>`<option${t.status===s?' selected':''}>${s}</option>`).join('')}</select>
+        <div class="row2">
+          <input type="date" id="de-due" value="${t.due||''}" />
+          <input type="time" id="de-time" value="${t.time||''}" />
+        </div>
+        <div class="row2">
+          <input type="text" id="de-person" value="${esc(t.person||'')}" placeholder="Person..." />
+          <input type="text" id="de-company" value="${esc(t.company||'')}" placeholder="Company..." />
+        </div>
+        <textarea id="de-notes" rows="4" placeholder="Notes...">${esc(t.notes||'')}</textarea>
+      </div>
+      <div class="detail-actions">
+        <button class="btn btn-primary" onclick="saveDetailEdit('${t.id}')">Save</button>
+        <button class="btn btn-ghost" onclick="detailEditing=false;render()">Cancel</button>
+      </div>
+    </div>`;
+  }
+  return `<div class="detail-content">
+    <button class="detail-close" onclick="selectedId=null;render()">✕</button>
+    <div class="detail-title">${esc(t.title)}</div>
+    <div class="detail-badges">
+      <span class="badge badge-${t.category}">${t.category}</span>
+      <span class="badge badge-${t.priority}">${t.priority}</span>
+      <span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>
+      ${over?`<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due,TODAY))}d overdue</span>`:''}
+    </div>
+    ${t.due?`<div class="detail-field"><div class="detail-label">Due</div><div class="detail-value">${formatDateLong(t.due)}${t.time?' @ '+t.time:''}</div></div>`:''}
+    ${t.person?`<div class="detail-field"><div class="detail-label">Person</div><div class="detail-value">👤 ${esc(t.person)}</div></div>`:''}
+    ${t.company?`<div class="detail-field"><div class="detail-label">Company</div><div class="detail-value">🏢 ${esc(t.company)}</div></div>`:''}
+    ${t.notes?`<div class="detail-field"><div class="detail-label">Notes</div><div class="detail-notes">${esc(t.notes)}</div></div>`:''}
+    <div class="detail-actions">
+      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null)">${t.done?'Mark Active':'✓ Complete'}</button>
+      <button class="btn btn-ghost" onclick="detailEditing=true;render()">Edit</button>
+      <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
+      <button class="btn btn-danger" onclick="deleteTask('${t.id}')">Delete</button>
+    </div>
+  </div>`;
 }
 
 function renderForm() {
-  const f=form;
-  let h=`<div class="form-panel">`;
-  h+=`<input type="text" id="f-title" value="${esc(f.title)}" placeholder="Task title..." />`;
-  h+=`<div class="form-row">`;
-  h+=`<select id="f-cat">${CATS.map(c=>`<option${f.category===c?' selected':''}>${c}</option>`).join('')}</select>`;
-  h+=`<select id="f-pri">${PRIS.map(p=>`<option${f.priority===p?' selected':''}>${p}</option>`).join('')}</select>`;
-  h+=`<select id="f-stat">${STATS.map(s=>`<option${f.status===s?' selected':''}>${s}</option>`).join('')}</select>`;
-  h+=`</div>`;
-  h+=`<div class="form-row">`;
-  h+=`<input type="date" id="f-due" value="${f.due||TODAY}" />`;
-  h+=`<input type="time" id="f-time" value="${f.time||''}" />`;
-  h+=`</div>`;
-  h+=`<div class="form-row">`;
-  h+=`<input type="text" class="person-field" id="f-person" value="${esc(f.person||'')}" placeholder="Associated person..." />`;
-  h+=`<input type="text" class="person-field" id="f-company" value="${esc(f.company||'')}" placeholder="Associated company..." />`;
-  h+=`</div>`;
-  h+=`<textarea id="f-notes" rows="2" placeholder="Notes (optional)...">${esc(f.notes||'')}</textarea>`;
-  h+=`<div class="form-actions">`;
-  h+=`<button class="btn btn-primary" onclick="addTask()">Add Task</button>`;
-  h+=`<button class="btn btn-ghost" onclick="showForm=false;render()">Cancel</button>`;
-  h+=`</div></div>`;
-  return h;
+  return `<div class="form-panel">
+    <input type="text" id="f-title" placeholder="Task title..." autofocus />
+    <div class="form-row">
+      <select id="f-cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+      <select id="f-pri">${PRIS.map(p=>`<option>${p}</option>`).join('')}</select>
+      <select id="f-stat">${STATS.map(s=>`<option>${s}</option>`).join('')}</select>
+    </div>
+    <div class="form-row">
+      <input type="date" id="f-due" value="${TODAY}" />
+      <input type="time" id="f-time" />
+    </div>
+    <div class="form-row">
+      <input type="text" id="f-person" placeholder="Person..." />
+      <input type="text" id="f-company" placeholder="Company..." />
+    </div>
+    <textarea id="f-notes" placeholder="Notes..." rows="2"></textarea>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addTask()">Add Task</button>
+      <button class="btn btn-ghost" onclick="showForm=false;render()">Cancel</button>
+    </div>
+  </div>`;
 }
 
 // ── KANBAN ──
 function renderKanban(mode) {
-  let h='';
-  if(showForm) h+=renderForm();
-
   const active=applyFilters(tasks.filter(t=>!t.done&&t.status!=='Completed'));
   const done=applyFilters(tasks.filter(t=>t.done||t.status==='Completed'));
-
-  h+='<div class="kanban-wrap">';
-
+  let h='<div class="kanban-wrap">';
   if(mode==='status'){
     const cols=[
-      {key:'PastDue',label:'Past Due',tasks:active.filter(t=>isOverdueTask(t))},
-      {key:'Pending',label:'Pending',tasks:active.filter(t=>!isOverdueTask(t)&&t.status==='Pending')},
-      {key:'InProgress',label:'In Progress',tasks:active.filter(t=>!isOverdueTask(t)&&t.status==='In Progress')},
-      {key:'Assigned',label:'Assigned',tasks:active.filter(t=>!isOverdueTask(t)&&t.status==='Assigned')},
+      {key:'PastDue',label:'Past Due',tasks:active.filter(t=>isOver(t))},
+      {key:'Pending',label:'Pending',tasks:active.filter(t=>!isOver(t)&&t.status==='Pending')},
+      {key:'InProgress',label:'In Progress',tasks:active.filter(t=>!isOver(t)&&t.status==='In Progress')},
+      {key:'Assigned',label:'Assigned',tasks:active.filter(t=>!isOver(t)&&t.status==='Assigned')},
       {key:'Completed',label:'Completed',tasks:done},
     ];
     cols.forEach(col=>{
       h+=`<div class="kanban-col col-${col.key}">`;
-      h+=`<div class="kanban-col-header"><span>${col.label}</span><span style="background:rgba(0,0,0,0.1);border-radius:10px;padding:0.1rem 0.45rem;font-size:0.68rem">${col.tasks.length}</span></div>`;
-      h+=`<div class="kanban-col-body">`;
-      if(col.tasks.length===0){
-        h+=`<div style="text-align:center;color:var(--g400);font-size:0.72rem;padding:1rem">Empty</div>`;
-      }
+      h+=`<div class="kanban-col-header"><span>${col.label}</span><span style="background:rgba(0,0,0,0.1);border-radius:10px;padding:0.08rem 0.4rem;font-size:0.65rem">${col.tasks.length}</span></div>`;
+      h+=`<div class="kanban-col-body" ondragover="kDragOver(event,'${col.key}','status')" ondrop="kDrop(event,'${col.key}','status')" ondragleave="kDragLeave(event)">`;
       col.tasks.forEach(t=>{h+=renderKanbanCard(t,mode);});
       h+=`</div></div>`;
     });
@@ -895,130 +794,172 @@ function renderKanban(mode) {
     CATS.forEach(cat=>{
       const catTasks=applyFilters(tasks).filter(t=>t.category===cat);
       h+=`<div class="kanban-col col-${cat}">`;
-      h+=`<div class="kanban-col-header"><span>${cat}</span><span style="background:rgba(0,0,0,0.1);border-radius:10px;padding:0.1rem 0.45rem;font-size:0.68rem">${catTasks.length}</span></div>`;
-      h+=`<div class="kanban-col-body">`;
-      if(catTasks.length===0){
-        h+=`<div style="text-align:center;color:var(--g400);font-size:0.72rem;padding:1rem">Empty</div>`;
-      }
+      h+=`<div class="kanban-col-header"><span>${cat}</span><span style="background:rgba(0,0,0,0.1);border-radius:10px;padding:0.08rem 0.4rem;font-size:0.65rem">${catTasks.length}</span></div>`;
+      h+=`<div class="kanban-col-body" ondragover="kDragOver(event,'${cat}','cat')" ondrop="kDrop(event,'${cat}','cat')" ondragleave="kDragLeave(event)">`;
       catTasks.forEach(t=>{h+=renderKanbanCard(t,mode);});
       h+=`</div></div>`;
     });
   }
-
   h+='</div>';
-  document.getElementById('content').innerHTML=h;
+  return h;
 }
 
 function renderKanbanCard(t,mode) {
-  const over=isOverdueTask(t);
-  const catKey=t.category==='Coppermoon'?'cm':t.category==='Recruiters'?'re':t.category==='NeoSci'?'ns':'pe';
-  let h=`<div class="kanban-card" onclick="openModal('${t.id}')" style="opacity:${t.done?'0.6':'1'};${t.done?'text-decoration:line-through;':''}" >`;
-  h+=`<div class="kanban-card-title">${esc(t.title)}</div>`;
-  h+=`<div class="kanban-card-meta">`;
-  if(mode==='status') h+=`<span class="kbadge badge-${t.category}">${t.category}</span>`;
-  else h+=`<span class="kbadge badge-${t.status.replace(' ','')}">${t.status}</span>`;
-  h+=`<span class="kbadge badge-${t.priority}">${t.priority}</span>`;
-  if(over) h+=`<span class="overdue-warn">⚠ ${Math.abs(daysBetween(t.due,TODAY))}d overdue</span>`;
-  else if(t.due) h+=`<span style="font-size:0.6rem;color:var(--g400)">${formatDate(t.due)}</span>`;
-  h+=`</div></div>`;
-  return h;
+  const over=isOver(t);
+  return `<div class="kanban-card" draggable="true" 
+    ondragstart="kDragStart(event,'${t.id}')"
+    onclick="selectKanbanCard('${t.id}')">
+    <div class="kanban-card-title">${esc(t.title)}</div>
+    <div class="kanban-card-meta">
+      ${mode==='status'?`<span class="kbadge badge-${t.category}">${t.category}</span>`:`<span class="kbadge badge-${t.status.replace(' ','')}">${t.status}</span>`}
+      <span class="kbadge badge-${t.priority}">${t.priority}</span>
+      ${over?`<span class="overdue-warn">⚠ ${Math.abs(daysBetween(t.due,TODAY))}d</span>`:t.due?`<span style="font-size:0.58rem;color:var(--g400)">${formatDate(t.due)}</span>`:''}
+    </div>
+  </div>`;
+}
+
+function selectKanbanCard(id) {
+  selectedId=id; detailEditing=false;
+  // Show modal for kanban
+  const t=tasks.find(x=>x.id===id);
+  if(!t)return;
+  showKanbanModal(t);
+}
+
+function showKanbanModal(t) {
+  const over=isOver(t);
+  let html=`<div class="modal-overlay" onclick="closeKanbanModal()" style="position:fixed;inset:0;background:rgba(12,27,42,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div onclick="event.stopPropagation()" style="background:white;border-radius:16px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);padding:1.25rem">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;padding-right:1rem">${esc(t.title)}</div>
+      <button onclick="closeKanbanModal()" style="background:var(--g50);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:1rem;color:var(--g600);flex-shrink:0">✕</button>
+    </div>
+    <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.75rem">
+      <span class="badge badge-${t.category}">${t.category}</span>
+      <span class="badge badge-${t.priority}">${t.priority}</span>
+      <span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>
+      ${over?`<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due,TODAY))}d overdue</span>`:''}
+    </div>
+    ${t.due?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Due</div><div style="font-size:0.83rem">${formatDateLong(t.due)}${t.time?' @ '+t.time:''}</div></div>`:''}
+    ${t.person?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Person</div><div style="font-size:0.83rem">👤 ${esc(t.person)}</div></div>`:''}
+    ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.83rem">🏢 ${esc(t.company)}</div></div>`:''}
+    ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.8rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
+      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeKanbanModal()">${t.done?'Mark Active':'✓ Complete'}</button>
+      <button class="btn btn-ghost" onclick="closeKanbanModal();view='list';selectedId='${t.id}';detailEditing=true;render()">Edit</button>
+      <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
+      <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeKanbanModal()">Delete</button>
+    </div>
+  </div></div>`;
+  const div=document.createElement('div');div.id='kanban-modal';div.innerHTML=html;document.body.appendChild(div);
+}
+function closeKanbanModal(){const m=document.getElementById('kanban-modal');if(m)m.remove();}
+
+// ── DRAG & DROP KANBAN ──
+function kDragStart(e,id){dragId=id;e.dataTransfer.effectAllowed='move';setTimeout(()=>{const el=document.querySelector(`[ondragstart*="${id}"]`);if(el)el.classList.add('dragging');},0);}
+function kDragOver(e,col,mode){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function kDragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function kDrop(e,col,mode){
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  if(!dragId)return;
+  tasks=tasks.map(t=>{
+    if(t.id!==dragId)return t;
+    if(mode==='status'){
+      if(col==='PastDue')return t;
+      if(col==='Completed')return{...t,done:true,status:'Completed'};
+      return{...t,status:col==='InProgress'?'In Progress':col,done:false};
+    } else {
+      return{...t,category:col};
+    }
+  });
+  dragId=null;save();render();
 }
 
 // ── WEEKLY CALENDAR ──
 function renderWeekly() {
-  let h='';
-  if(showForm) h+=renderForm();
-
-  // Get week start (Monday)
   const now=new Date(calDate);
   const dow=now.getDay();
-  const monday=new Date(now);
-  monday.setDate(now.getDate()-(dow===0?6:dow-1));
+  const monday=new Date(now);monday.setDate(now.getDate()-(dow===0?6:dow-1));
+  const we=new Date(monday);we.setDate(monday.getDate()+6);
 
-  h+=`<div class="cal-nav">`;
-  h+=`<button onclick="calDate=new Date(calDate);calDate.setDate(calDate.getDate()-7);render()">‹ Prev</button>`;
-  const we=new Date(monday); we.setDate(monday.getDate()+6);
-  h+=`<h2>${monday.toLocaleDateString('en-US',{month:'long',day:'numeric'})} – ${we.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</h2>`;
-  h+=`<button onclick="calDate=new Date(calDate);calDate.setDate(calDate.getDate()+7);render()">Next ›</button>`;
-  h+=`<button onclick="calDate=new Date();render()" style="margin-left:0.5rem">Today</button>`;
-  h+=`</div>`;
+  let h=`<div class="cal-nav">
+    <button onclick="calDate=new Date(calDate);calDate.setDate(calDate.getDate()-7);render()">‹</button>
+    <h2>${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${we.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</h2>
+    <button onclick="calDate=new Date(calDate);calDate.setDate(calDate.getDate()+7);render()">›</button>
+    <button onclick="calDate=new Date();render()">Today</button>
+  </div>`;
 
   const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   h+=`<div class="cal-week-grid">`;
   for(let i=0;i<7;i++){
-    const d=new Date(monday); d.setDate(monday.getDate()+i);
+    const d=new Date(monday);d.setDate(monday.getDate()+i);
     const ds=d.toISOString().split('T')[0];
-    const isToday=ds===TODAY;
+    const isT=ds===TODAY;
     const dayTasks=applyFilters(tasks).filter(t=>t.due===ds);
-    h+=`<div class="cal-week-col${isToday?' today-col':''}">`;
+    h+=`<div class="cal-week-col${isT?' today-col':''}">`;
     h+=`<div class="cal-week-header"><div class="cal-week-dow">${days[i]}</div><div class="cal-week-date">${d.getDate()}</div></div>`;
-    h+=`<div class="cal-week-body">`;
+    h+=`<div class="cal-week-body cal-day-drop" ondragover="calDragOver(event,'${ds}')" ondrop="calDrop(event,'${ds}')" ondragleave="calDragLeave(event)">`;
     dayTasks.forEach(t=>{
-      const over=isOverdueTask(t);
-      h+=`<div class="cal-mini-card cat-${t.category}${over?' is-overdue':''}" onclick="openModal('${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
+      const over=isOver(t);
+      h+=`<div class="cal-mini-card cat-${t.category}${over?' is-overdue':''}" draggable="true" ondragstart="calDragStart(event,'${t.id}')" onclick="selectKanbanCard('${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
     });
     h+=`</div></div>`;
   }
   h+=`</div>`;
-  document.getElementById('content').innerHTML=h;
+  return h;
 }
 
 // ── MONTHLY CALENDAR ──
 function renderMonthly() {
-  let h='';
-  if(showForm) h+=renderForm();
-
   const year=calDate.getFullYear();
   const month=calDate.getMonth();
   const firstDay=new Date(year,month,1);
   const lastDay=new Date(year,month+1,0);
-  const startDow=firstDay.getDay()===0?6:firstDay.getDay()-1; // Monday=0
+  const startDow=firstDay.getDay()===0?6:firstDay.getDay()-1;
 
-  h+=`<div class="cal-nav">`;
-  h+=`<button onclick="calDate=new Date(calDate.getFullYear(),calDate.getMonth()-1,1);render()">‹ Prev</button>`;
-  h+=`<h2>${firstDay.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</h2>`;
-  h+=`<button onclick="calDate=new Date(calDate.getFullYear(),calDate.getMonth()+1,1);render()">Next ›</button>`;
-  h+=`<button onclick="calDate=new Date();render()" style="margin-left:0.5rem">Today</button>`;
-  h+=`</div>`;
+  let h=`<div class="cal-nav">
+    <button onclick="calDate=new Date(calDate.getFullYear(),calDate.getMonth()-1,1);render()">‹</button>
+    <h2>${firstDay.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</h2>
+    <button onclick="calDate=new Date(calDate.getFullYear(),calDate.getMonth()+1,1);render()">›</button>
+    <button onclick="calDate=new Date();render()">Today</button>
+  </div>`;
 
   const dows=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   h+=`<div class="cal-grid-month">`;
-  dows.forEach(d=>{ h+=`<div class="cal-dow">${d}</div>`; });
-
-  // Empty cells before month start
-  for(let i=0;i<startDow;i++){
-    h+=`<div class="cal-day other-month"></div>`;
-  }
-  // Days
+  dows.forEach(d=>{h+=`<div class="cal-dow">${d}</div>`;});
+  for(let i=0;i<startDow;i++){h+=`<div class="cal-day other-month"></div>`;}
   for(let d=1;d<=lastDay.getDate();d++){
     const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday=ds===TODAY;
+    const isT=ds===TODAY;
     const dayTasks=applyFilters(tasks).filter(t=>t.due===ds);
-    h+=`<div class="cal-day${isToday?' today-day':''}">`;
+    h+=`<div class="cal-day${isT?' today-day':''}" ondragover="calDragOver(event,'${ds}')" ondrop="calDrop(event,'${ds}')" ondragleave="calDragLeave(event)">`;
     h+=`<div class="cal-day-num">${d}</div>`;
-    dayTasks.slice(0,4).forEach(t=>{
-      const over=isOverdueTask(t);
-      h+=`<div class="cal-mini-card cat-${t.category}${over?' is-overdue':''}" onclick="openModal('${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
+    dayTasks.slice(0,3).forEach(t=>{
+      h+=`<div class="cal-mini-card cat-${t.category}${isOver(t)?' is-overdue':''}" draggable="true" ondragstart="calDragStart(event,'${t.id}')" onclick="selectKanbanCard('${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
     });
-    if(dayTasks.length>4) h+=`<div style="font-size:0.58rem;color:var(--g400);padding:1px 2px">+${dayTasks.length-4} more</div>`;
+    if(dayTasks.length>3)h+=`<div style="font-size:0.56rem;color:var(--g400);padding:1px 2px">+${dayTasks.length-3} more</div>`;
     h+=`</div>`;
   }
-  // Remaining empty cells
   const total=startDow+lastDay.getDate();
-  const rem=(7-total%7)%7;
-  for(let i=0;i<rem;i++){
-    h+=`<div class="cal-day other-month"></div>`;
-  }
+  for(let i=0;i<(7-total%7)%7;i++){h+=`<div class="cal-day other-month"></div>`;}
   h+=`</div>`;
-  document.getElementById('content').innerHTML=h;
+  return h;
 }
 
-// ─── BOOT ───────────────────────────────────────────────────────────────────
-load();
-render();
+// ── DRAG & DROP CALENDAR ──
+function calDragStart(e,id){dragId=id;e.dataTransfer.effectAllowed='move';}
+function calDragOver(e,ds){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function calDragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function calDrop(e,ds){
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  if(!dragId)return;
+  tasks=tasks.map(t=>t.id===dragId?{...t,due:ds}:t);
+  dragId=null;save();render();
+}
 
-// Close modal on Escape
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+function init() { load(); render(); }
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedId=null;detailEditing=false;closeKanbanModal();render();}});
 </script>
 </body>
 </html>
