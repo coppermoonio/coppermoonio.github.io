@@ -154,10 +154,32 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .detail-pane.open { flex: 0 0 48%; }
 
 @media(max-width: 768px) {
-  .main-layout { flex-direction: column; height: auto; }
+  .main-layout { flex-direction: column; height: auto; overflow: visible; }
+  .list-pane { height: auto; overflow: visible; }
   .list-pane.with-detail { flex: none; }
-  .detail-pane { flex: none; border-left: none; border-top: 2px solid var(--g100); }
-  .detail-pane.open { flex: none; min-height: 400px; }
+  .detail-pane { display: none !important; }
+}
+
+/* MOBILE BOTTOM SHEET */
+.bottom-sheet-overlay {
+  display: none;
+  position: fixed; inset: 0; background: rgba(12,27,42,0.5);
+  z-index: 500; align-items: flex-end;
+}
+.bottom-sheet-overlay.open { display: flex; }
+.bottom-sheet {
+  background: white; width: 100%; max-height: 85vh;
+  border-radius: 20px 20px 0 0; overflow-y: auto;
+  padding: 1.25rem; padding-bottom: 2rem;
+  animation: slideUpSheet 0.25s ease;
+}
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.sheet-handle {
+  width: 36px; height: 4px; background: var(--g200);
+  border-radius: 2px; margin: 0 auto 1rem;
 }
 
 /* FORM PANEL */
@@ -369,6 +391,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
   <div id="pw-error">Incorrect password</div>
 </div>
 
+<!-- MOBILE BOTTOM SHEET -->
+<div class="bottom-sheet-overlay" id="bottom-sheet-overlay" onclick="closeBottomSheet()">
+  <div class="bottom-sheet" onclick="event.stopPropagation()" id="bottom-sheet-content">
+    <div class="sheet-handle"></div>
+    <div id="bottom-sheet-body"></div>
+  </div>
+</div>
+
 <!-- APP (hidden until pw) -->
 <div id="app" style="display:none">
   <div class="topbar">
@@ -534,7 +564,46 @@ function deleteTask(id) {
   save(); render();
 }
 
+function isMobile() { return window.innerWidth <= 768; }
+
+function showBottomSheet(t) {
+  const over=isOver(t);
+  document.getElementById('bottom-sheet-body').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;padding-right:1rem">${esc(t.title)}</div>
+      <button onclick="closeBottomSheet()" style="background:var(--g50);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:1rem;color:var(--g600);flex-shrink:0">✕</button>
+    </div>
+    <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.75rem">
+      <span class="badge badge-${t.category}">${t.category}</span>
+      <span class="badge badge-${t.priority}">${t.priority}</span>
+      <span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>
+      ${over?`<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due,TODAY))}d overdue</span>`:''}
+    </div>
+    ${t.due?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Due</div><div style="font-size:0.85rem">${formatDateLong(t.due)}${t.time?' @ '+t.time:''}</div></div>`:''}
+    ${t.person?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Person</div><div style="font-size:0.85rem">👤 ${esc(t.person)}</div></div>`:''}
+    ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.85rem">🏢 ${esc(t.company)}</div></div>`:''}
+    ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.82rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
+      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${t.done?'Mark Active':'✓ Complete'}</button>
+      <button class="btn btn-ghost" onclick="closeBottomSheet();selectedId='${t.id}';detailEditing=true;render()">Edit</button>
+      <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
+      <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeBottomSheet()">Delete</button>
+    </div>`;
+  document.getElementById('bottom-sheet-overlay').classList.add('open');
+}
+
+function closeBottomSheet() {
+  document.getElementById('bottom-sheet-overlay').classList.remove('open');
+  selectedId=null;
+}
+
 function selectTask(id) {
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  if(isMobile()) {
+    showBottomSheet(t);
+    return;
+  }
   selectedId = selectedId===id ? null : id;
   detailEditing = false;
   render();
@@ -959,7 +1028,7 @@ function calDrop(e,ds){
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function init() { load(); render(); }
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedId=null;detailEditing=false;closeKanbanModal();render();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedId=null;detailEditing=false;closeBottomSheet();closeKanbanModal();render();}});
 </script>
 </body>
 </html>
