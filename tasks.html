@@ -30,7 +30,8 @@
   --cat-pe-bg: #FDF2F8; --cat-pe-border: #DB2777; --cat-pe-text: #9D174D;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; }
+body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; }
+html { overflow-x: hidden; }
 
 /* PASSWORD SCREEN */
 #pw-screen {
@@ -155,9 +156,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 
 @media(max-width: 768px) {
   .main-layout { flex-direction: column; height: auto; overflow: visible; }
-  .list-pane { height: auto; overflow: visible; }
+  .list-pane { height: auto; overflow: visible; padding: 0.75rem; }
   .list-pane.with-detail { flex: none; }
   .detail-pane { display: none !important; }
+  .topbar { padding: 0.65rem 0.75rem; }
+  .statsbar { padding: 0.4rem 0.75rem; }
+  .toolbar { padding: 0.5rem 0.75rem; }
+  .task-card { border-radius: 8px; }
+  .task-meta { gap: 0.25rem; }
 }
 
 /* MOBILE BOTTOM SHEET */
