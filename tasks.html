@@ -62,11 +62,27 @@ html { overflow-x: hidden; }
   display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 100;
   box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  /* FIX: prevent overflow on mobile */
+  min-width: 0;
+  gap: 0.5rem;
 }
-.topbar-left { display: flex; align-items: center; gap: 0.75rem; }
+.topbar-left { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
 .topbar img { height: 30px; }
 .topbar h1 { color: white; font-size: 1rem; font-weight: 600; }
-.topbar-right { display: flex; align-items: center; gap: 0.5rem; }
+.topbar-right {
+  display: flex; align-items: center; gap: 0.4rem;
+  /* FIX: allow wrapping and don't overflow */
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+/* FIX: smaller buttons on mobile to prevent topbar overflow */
+@media(max-width: 480px) {
+  .topbar { padding: 0.5rem 0.6rem; }
+  .topbar h1 { font-size: 0.9rem; }
+  .btn-mic, .btn-primary { padding: 0.35rem 0.6rem; font-size: 0.72rem; }
+}
 
 /* STATS */
 .statsbar {
@@ -635,35 +651,75 @@ function saveDetailEdit(id) {
   save(); detailEditing=false; render();
 }
 
-// ─── VOICE ───────────────────────────────────────────────────────────────────
+// ─── VOICE (FIX: proper toggle, stop after result, no zombie mic) ─────────────
 function startVoice() {
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert('Voice input requires Chrome or Edge.');return;}
-  recognition=new SR();recognition.lang='en-US';
-  recognition.onstart=()=>{listening=true;render();}
-  recognition.onend=()=>{listening=false;render();}
-  recognition.onerror=()=>{listening=false;render();}
-  recognition.onresult=(e)=>{
-    const txt=e.results[0][0].transcript;
-    showForm=true;render();
-    setTimeout(()=>{const el=document.getElementById('f-title');if(el){el.value=txt;el.focus();}},100);
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) { alert('Voice input requires Chrome or Edge.'); return; }
+
+  // If already listening, stop it
+  if(listening) { stopVoice(); return; }
+
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;      // FIX: stop after one utterance
+  recognition.interimResults = false;  // FIX: don't fire partial results
+
+  recognition.onstart = () => { listening = true; renderTopbar(); renderListenBanner(); };
+
+  recognition.onend = () => {
+    // FIX: always clean up listening state when mic closes
+    listening = false;
+    recognition = null;
+    renderTopbar();
+    renderListenBanner();
   };
+
+  recognition.onerror = (e) => {
+    listening = false;
+    recognition = null;
+    renderTopbar();
+    renderListenBanner();
+  };
+
+  recognition.onresult = (e) => {
+    const txt = e.results[0][0].transcript;
+    // FIX: stop recognition immediately after we get the result
+    if(recognition) recognition.stop();
+    showForm = true;
+    // Render the form first, then populate the field
+    renderMainContent();
+    setTimeout(() => {
+      const el = document.getElementById('f-title');
+      if(el) { el.value = txt; el.focus(); }
+    }, 100);
+  };
+
   recognition.start();
 }
-function stopVoice(){if(recognition)recognition.stop();listening=false;render();}
+
+function stopVoice() {
+  if(recognition) {
+    recognition.stop();
+    recognition = null;
+  }
+  listening = false;
+  renderTopbar();
+  renderListenBanner();
+}
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
   renderTopbar(); renderStats(); renderViewTabs(); renderListenBanner(); renderToolbar(); renderMainContent();
 }
 
+// FIX: partial renders so search input isn't destroyed while typing
 function renderTopbar() {
   document.getElementById('topbar-right').innerHTML=`
     <button class="btn btn-mic${listening?' listening':''}" onclick="${listening?'stopVoice()':'startVoice()'}">
-      ${listening?'⏹':'🎤'} ${listening?'Stop':'Voice'}
+      ${listening?'⏹ Stop':'🎤 Voice'}
     </button>
-    <button class="btn btn-primary" onclick="showForm=!showForm;if(!showForm&&!selectedId)render();else render()">
-      ${showForm?'✕ Cancel':'+ Add Task'}
+    <button class="btn btn-primary" onclick="showForm=!showForm;render()">
+      ${showForm?'✕ Cancel':'+ Add'}
     </button>`;
 }
 
@@ -692,19 +748,39 @@ function renderListenBanner() {
   document.getElementById('listen-banner').style.display=listening?'flex':'none';
 }
 
+// FIX: Search input blur — use a targeted update instead of replacing the whole toolbar.
+// On first render (or when sort/filter changes), rebuild the whole toolbar.
+// On search input, only update the task list — leave the toolbar DOM alone.
+let _lastToolbarKey = '';
 function renderToolbar() {
-  let h=`<div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search tasks..." value="${esc(search)}" oninput="search=this.value;render()" /></div>`;
-  h+=`<div class="sort-wrap"><label>Sort:</label><select class="sort-select" onchange="sortBy=this.value;render()">`;
-  [['priority','Priority'],['due','Due Date'],['status','Status'],['category','Category'],['person','Person'],['company','Company']].forEach(([k,l])=>{
-    h+=`<option value="${k}"${sortBy===k?' selected':''}>${l}</option>`;
-  });
-  h+=`</select></div>`;
-  h+='<div class="cat-filters">';
-  ['All',...CATS].forEach(c=>{
-    h+=`<button class="cat-btn${filterCat===c?' active-'+c:''}" onclick="filterCat='${c}';render()">${c}</button>`;
-  });
-  h+='</div>';
-  document.getElementById('toolbar').innerHTML=h;
+  // Build a key representing everything EXCEPT search text
+  const toolbarKey = `${filterCat}|${sortBy}|${view}`;
+  const alreadyHasInput = !!document.getElementById('search-input');
+
+  if(!alreadyHasInput || toolbarKey !== _lastToolbarKey) {
+    // Full toolbar rebuild (first load, or filter/sort changed)
+    _lastToolbarKey = toolbarKey;
+    let h = `<div class="search-wrap"><span class="search-icon">🔍</span><input id="search-input" type="text" placeholder="Search tasks..." value="${esc(search)}" /></div>`;
+    h += `<div class="sort-wrap"><label>Sort:</label><select class="sort-select" onchange="sortBy=this.value;render()">`;
+    [['priority','Priority'],['due','Due Date'],['status','Status'],['category','Category'],['person','Person'],['company','Company']].forEach(([k,l])=>{
+      h += `<option value="${k}"${sortBy===k?' selected':''}>${l}</option>`;
+    });
+    h += `</select></div>`;
+    h += '<div class="cat-filters">';
+    ['All',...CATS].forEach(c=>{
+      h += `<button class="cat-btn${filterCat===c?' active-'+c:''}" onclick="filterCat='${c}';render()">${c}</button>`;
+    });
+    h += '</div>';
+    document.getElementById('toolbar').innerHTML = h;
+
+    // FIX: Attach search listener directly to the DOM element — no inline oninput
+    // so we never destroy the input while the user is typing
+    document.getElementById('search-input').addEventListener('input', function() {
+      search = this.value;
+      renderMainContent(); // Only re-render the task list, NOT the toolbar
+    });
+  }
+  // If toolbar already exists and only search changed, leave it alone — renderMainContent handles the filtered output
 }
 
 function renderMainContent() {
@@ -895,7 +971,6 @@ function renderKanbanCard(t,mode) {
 
 function selectKanbanCard(id) {
   selectedId=id; detailEditing=false;
-  // Show modal for kanban
   const t=tasks.find(x=>x.id===id);
   if(!t)return;
   showKanbanModal(t);
