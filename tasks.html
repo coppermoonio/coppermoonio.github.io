@@ -287,11 +287,11 @@ html { overflow-x: hidden; }
 .badge-Medium { background: #FEF3C7; color: #92400E; }
 .badge-Low { background: var(--g50); color: var(--g600); }
 .badge-Pending { background: var(--g50); color: var(--g600); }
-.status-label { font-size: 0.6rem; font-weight: 600; padding: 0; background: none; color: var(--g400); }
-.status-label.badge-Pending { color: var(--g400); }
-.status-label.badge-InProgress { color: var(--amber); }
-.status-label.badge-Assigned { color: var(--purple); }
-.status-label.badge-Completed { color: var(--green); }
+.status-label { font-size: 0.6rem; font-weight: 600; padding: 0 !important; background: none !important; border: none !important; }
+.status-label.badge-Pending { color: var(--g400) !important; }
+.status-label.badge-InProgress { color: var(--amber) !important; }
+.status-label.badge-Assigned { color: var(--purple) !important; }
+.status-label.badge-Completed { color: var(--green) !important; font-weight: 700; }
 .badge-InProgress { background: #FFFBEB; color: #92400E; }
 .badge-Completed { background: #F0FDF4; color: #065F46; }
 .badge-Assigned { background: #F5F3FF; color: var(--purple); }
@@ -591,8 +591,12 @@ function toggleDone(id, e) {
   if(e) e.stopPropagation();
   tasks=tasks.map(t=>{
     if(t.id!==id)return t;
-    const done=!t.done;
-    return{...t,done,status:done?'Completed':t.status==='Completed'?'Pending':t.status};
+    const done=!(t.done||t.status==='Completed');
+    return{...t,
+      done,
+      status: done?'Completed':t.status==='Completed'?'Pending':t.status,
+      completedDate: done?TODAY:null
+    };
   });
   save(); render();
 }
@@ -886,28 +890,40 @@ function getGroupKey(t) {
   if(sortBy==='status') return t.status;
   if(sortBy==='person') return t.person||'No Person';
   if(sortBy==='company') return t.company||'No Company';
-  return null; // no grouping
+  return null;
+}
+
+// Sort group headers: Overdue first, Due Today second, then chronological
+function sortGroupKeys(keys) {
+  return keys.sort((a, b) => {
+    const order = k => k==='⚠ Overdue'?0 : k==='📌 Due Today'?1 : k==='No Due Date'?999 : 2;
+    const oa=order(a), ob=order(b);
+    if(oa!==ob) return oa-ob;
+    // For date strings, sort chronologically
+    if(oa===2) return a.localeCompare(b);
+    return 0;
+  });
 }
 
 function groupTasksBy(list) {
-  const groups = [];
   const seen = new Map();
   list.forEach(t => {
-    const key = getGroupKey(t);
-    if(key === null) {
-      // no grouping — single group
-      if(!seen.has('__all__')) { seen.set('__all__', []); groups.push({key:'__all__', tasks:seen.get('__all__')}); }
-      seen.get('__all__').push(t);
-    } else {
-      if(!seen.has(key)) { seen.set(key, []); groups.push({key, tasks:seen.get(key)}); }
-      seen.get(key).push(t);
-    }
+    const key = getGroupKey(t) || '__all__';
+    if(!seen.has(key)) seen.set(key, []);
+    seen.get(key).push(t);
   });
-  return groups;
+  // Sort the group keys
+  const keys = seen.has('__all__') ? ['__all__'] : sortGroupKeys([...seen.keys()]);
+  return keys.map(key => ({key, tasks: seen.get(key)}));
 }
 
 function renderListView() {
-  let active=sortTasks(applyFilters(tasks.filter(t=>!t.done&&t.status!=='Completed')));
+  // Show tasks completed TODAY in the list (moves to Completed tab tomorrow)
+  let active=sortTasks(applyFilters(tasks.filter(t=>{
+    const isDone = t.done || t.status==='Completed';
+    if(!isDone) return true;
+    return t.completedDate === TODAY; // keep visible if completed today
+  })));
   const hasSel=selectedId&&tasks.find(t=>t.id===selectedId);
 
   let listH='';
@@ -953,7 +969,7 @@ function renderListView() {
 }
 
 function renderCompletedView() {
-  let done = applyFilters(tasks.filter(t=>t.done||t.status==='Completed'));
+  let done = applyFilters(tasks.filter(t=>(t.done||t.status==='Completed') && t.completedDate!==TODAY));
   // Sort completed by most recently completed (use due date as proxy, newest first)
   done = done.slice().sort((a,b)=>(b.due||'0000').localeCompare(a.due||'0000'));
 
