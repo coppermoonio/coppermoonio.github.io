@@ -79,9 +79,12 @@ html { overflow-x: hidden; }
 
 /* FIX: smaller buttons on mobile to prevent topbar overflow */
 @media(max-width: 480px) {
-  .topbar { padding: 0.5rem 0.6rem; }
-  .topbar h1 { font-size: 0.9rem; }
-  .btn-mic, .btn-primary { padding: 0.35rem 0.6rem; font-size: 0.72rem; }
+  .topbar { padding: 0.5rem 0.6rem; gap: 0.3rem; }
+  .topbar h1 { font-size: 0.82rem; }
+  .topbar img { height: 22px; }
+  .btn-mic { padding: 0.3rem 0.5rem; font-size: 0.68rem; }
+  .btn-mic .btn-label { display: none; }
+  .btn-add { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
 }
 
 /* STATS */
@@ -190,9 +193,11 @@ html { overflow-x: hidden; }
 }
 .bottom-sheet-overlay.open { display: flex; }
 .bottom-sheet {
-  background: white; width: 100%; max-height: 85vh;
+  background: white; width: 100%;
+  min-height: 60vh;       /* FIX: always opens at least 60% of screen */
+  max-height: 92vh;       /* FIX: nearly full screen so content isn't cut off */
   border-radius: 20px 20px 0 0; overflow-y: auto;
-  padding: 1.25rem; padding-bottom: 2rem;
+  padding: 1.25rem; padding-bottom: 3rem;
   animation: slideUpSheet 0.25s ease;
 }
 @keyframes slideUpSheet {
@@ -606,8 +611,8 @@ function showBottomSheet(t) {
     ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.85rem">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.82rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
-      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${t.done?'Mark Active':'✓ Complete'}</button>
-      <button class="btn btn-ghost" onclick="closeBottomSheet();selectedId='${t.id}';detailEditing=true;render()">Edit</button>
+      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${t.done?'↩ Uncheck':'✓ Complete'}</button>
+      <button class="btn btn-ghost" onclick="openEditSheet('${t.id}')">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeBottomSheet()">Delete</button>
     </div>`;
@@ -617,6 +622,67 @@ function showBottomSheet(t) {
 function closeBottomSheet() {
   document.getElementById('bottom-sheet-overlay').classList.remove('open');
   selectedId=null;
+}
+
+// FIX: Mobile edit — show edit form inside the bottom sheet instead of closing
+function openEditSheet(id) {
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  document.getElementById('bottom-sheet-body').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <div style="font-size:0.9rem;font-weight:700;color:var(--navy)">Edit Task</div>
+      <button onclick="closeBottomSheet()" style="background:var(--g50);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:1rem;color:var(--g600)">x</button>
+    </div>
+    <input id="es-title" type="text" value="${esc(t.title)}" placeholder="Task title..."
+      style="width:100%;padding:0.55rem 0.7rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.9rem;margin-bottom:0.5rem;outline:none;box-sizing:border-box" />
+    <div style="display:flex;gap:0.4rem;margin-bottom:0.5rem">
+      <select id="es-cat" style="flex:1;padding:0.45rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;background:white;outline:none">
+        ${CATS.map(c=>`<option${t.category===c?' selected':''}>${c}</option>`).join('')}
+      </select>
+      <select id="es-pri" style="flex:1;padding:0.45rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;background:white;outline:none">
+        ${PRIS.map(p=>`<option${t.priority===p?' selected':''}>${p}</option>`).join('')}
+      </select>
+    </div>
+    <select id="es-stat" style="width:100%;padding:0.45rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;background:white;outline:none;margin-bottom:0.5rem">
+      ${STATS.map(s=>`<option${t.status===s?' selected':''}>${s}</option>`).join('')}
+    </select>
+    <div style="display:flex;gap:0.4rem;margin-bottom:0.5rem">
+      <input id="es-due" type="date" value="${t.due||''}" style="flex:1;padding:0.45rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;background:white;outline:none" />
+      <input id="es-time" type="time" value="${t.time||''}" style="flex:1;padding:0.45rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;background:white;outline:none" />
+    </div>
+    <input id="es-person" type="text" value="${esc(t.person||'')}" placeholder="Person..."
+      style="width:100%;padding:0.45rem 0.6rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;margin-bottom:0.5rem;outline:none;box-sizing:border-box" />
+    <input id="es-company" type="text" value="${esc(t.company||'')}" placeholder="Company..."
+      style="width:100%;padding:0.45rem 0.6rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;margin-bottom:0.5rem;outline:none;box-sizing:border-box" />
+    <textarea id="es-notes" rows="3" placeholder="Notes..." style="width:100%;padding:0.45rem 0.6rem;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:0.8rem;resize:vertical;outline:none;box-sizing:border-box;margin-bottom:0.75rem">${esc(t.notes||'')}</textarea>
+    <div style="display:flex;gap:0.4rem">
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditSheet('${t.id}')">Save</button>
+      <button class="btn btn-ghost" onclick="showBottomSheet(tasks.find(x=>x.id==='${t.id}'))">Cancel</button>
+    </div>`;
+  document.getElementById('bottom-sheet-overlay').classList.add('open');
+}
+
+function saveEditSheet(id) {
+  const title = (document.getElementById('es-title')||{}).value||'';
+  if(!title.trim()) return;
+  tasks = tasks.map(t => {
+    if(t.id!==id) return t;
+    return {...t,
+      title: title.trim(),
+      category: (document.getElementById('es-cat')||{}).value||t.category,
+      priority: (document.getElementById('es-pri')||{}).value||t.priority,
+      status: (document.getElementById('es-stat')||{}).value||t.status,
+      due: (document.getElementById('es-due')||{}).value||t.due,
+      time: (document.getElementById('es-time')||{}).value||'',
+      person: (document.getElementById('es-person')||{}).value||'',
+      company: (document.getElementById('es-company')||{}).value||'',
+      notes: (document.getElementById('es-notes')||{}).value||''
+    };
+  });
+  save();
+  closeBottomSheet();
+  renderStats();
+  renderMainContent();
 }
 
 function selectTask(id) {
@@ -716,10 +782,10 @@ function render() {
 function renderTopbar() {
   document.getElementById('topbar-right').innerHTML=`
     <button class="btn btn-mic${listening?' listening':''}" onclick="${listening?'stopVoice()':'startVoice()'}">
-      ${listening?'⏹ Stop':'🎤 Voice'}
+      ${listening?'⏹':'🎤'} <span class="btn-label">${listening?'Stop':'Voice'}</span>
     </button>
-    <button class="btn btn-primary" onclick="showForm=!showForm;render()">
-      ${showForm?'✕ Cancel':'+ Add'}
+    <button class="btn btn-primary btn-add" onclick="showForm=!showForm;render()">
+      ${showForm?'✕ Cancel':'+ Add Task'}
     </button>`;
 }
 
