@@ -811,7 +811,7 @@ function renderStats() {
 }
 
 function renderViewTabs() {
-  const views=[['list','☰ List'],['weekly','📅 Weekly'],['monthly','🗓 Monthly'],['kanban-status','⬜ By Status'],['kanban-cat','🏷 By Category']];
+  const views=[['list','☰ List'],['completed','✅ Completed'],['weekly','📅 Weekly'],['monthly','🗓 Monthly'],['kanban-status','⬜ By Status'],['kanban-cat','🏷 By Category']];
   document.getElementById('view-tabs').innerHTML=views.map(([k,l])=>
     `<button class="view-tab${view===k?' active':''}" onclick="view='${k}';selectedId=null;render()">${l}</button>`
   ).join('');
@@ -859,6 +859,7 @@ function renderToolbar() {
 function renderMainContent() {
   const mc=document.getElementById('main-content');
   if(view==='list') mc.innerHTML=renderListView();
+  else if(view==='completed') mc.innerHTML=renderCompletedView();
   else if(view==='weekly') mc.innerHTML=`<div class="cal-wrap">${renderWeekly()}</div>`;
   else if(view==='monthly') mc.innerHTML=`<div class="cal-wrap">${renderMonthly()}</div>`;
   else if(view==='kanban-status') mc.innerHTML=renderKanban('status');
@@ -866,19 +867,70 @@ function renderMainContent() {
 }
 
 // ── LIST VIEW ──
+function getGroupKey(t) {
+  if(sortBy==='due') {
+    if(!t.due) return 'No Due Date';
+    if(t.due < TODAY) return '⚠ Overdue';
+    if(t.due === TODAY) return '📌 Due Today';
+    const d = new Date(t.due+'T12:00:00');
+    return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  }
+  if(sortBy==='category') return t.category;
+  if(sortBy==='priority') return t.priority;
+  if(sortBy==='status') return t.status;
+  if(sortBy==='person') return t.person||'No Person';
+  if(sortBy==='company') return t.company||'No Company';
+  return null; // no grouping
+}
+
+function groupTasksBy(list) {
+  const groups = [];
+  const seen = new Map();
+  list.forEach(t => {
+    const key = getGroupKey(t);
+    if(key === null) {
+      // no grouping — single group
+      if(!seen.has('__all__')) { seen.set('__all__', []); groups.push({key:'__all__', tasks:seen.get('__all__')}); }
+      seen.get('__all__').push(t);
+    } else {
+      if(!seen.has(key)) { seen.set(key, []); groups.push({key, tasks:seen.get(key)}); }
+      seen.get(key).push(t);
+    }
+  });
+  return groups;
+}
+
 function renderListView() {
   let active=sortTasks(applyFilters(tasks.filter(t=>!t.done&&t.status!=='Completed')));
-  let done=applyFilters(tasks.filter(t=>t.done||t.status==='Completed'));
   const hasSel=selectedId&&tasks.find(t=>t.id===selectedId);
 
   let listH='';
   if(showForm) listH+=renderForm();
   listH+='<div class="task-list">';
-  if(active.length===0&&!search) listH+=`<div class="empty"><div class="empty-icon">✅</div>All clear!</div>`;
-  active.forEach(t=>{ listH+=renderTaskCard(t); });
-  if(done.length>0){
-    listH+=`<div class="section-header">Completed <span class="count">${done.length}</span></div>`;
-    done.forEach(t=>{ listH+=renderTaskCard(t); });
+
+  if(active.length===0) {
+    listH+=`<div class="empty"><div class="empty-icon">✅</div>${search?'No matching tasks.':'All clear! Check Completed tab for done tasks.'}</div>`;
+  } else {
+    const groups = groupTasksBy(active);
+    if(groups.length===1 && groups[0].key==='__all__') {
+      // No grouping headers
+      active.forEach(t=>{ listH+=renderTaskCard(t); });
+    } else {
+      groups.forEach(g => {
+        const isOverdue = g.key==='⚠ Overdue';
+        const isToday = g.key==='📌 Due Today';
+        const headerStyle = isOverdue
+          ? 'background:#FEE2E2;color:var(--red);border-left:3px solid var(--red)'
+          : isToday
+            ? 'background:#FEF3C7;color:#92400E;border-left:3px solid var(--amber)'
+            : 'background:var(--g50);color:var(--g600);border-left:3px solid var(--g200)';
+        listH+=`<div style="margin:0.75rem 0 0.3rem;padding:0.35rem 0.75rem;border-radius:6px;font-size:0.72rem;font-weight:700;letter-spacing:0.03em;display:flex;align-items:center;justify-content:space-between;${headerStyle}">
+          <span>${g.key}</span>
+          <span style="font-size:0.65rem;opacity:0.7">${g.tasks.length}</span>
+        </div>`;
+        g.tasks.forEach(t=>{ listH+=renderTaskCard(t); });
+      });
+    }
   }
   listH+='</div>';
 
@@ -892,6 +944,23 @@ function renderListView() {
     <div class="list-pane${hasSel?' with-detail':''}">${listH}</div>
     <div class="detail-pane${hasSel?' open':''}">${detailH}</div>
   </div>`;
+}
+
+function renderCompletedView() {
+  let done = applyFilters(tasks.filter(t=>t.done||t.status==='Completed'));
+  // Sort completed by most recently completed (use due date as proxy, newest first)
+  done = done.slice().sort((a,b)=>(b.due||'0000').localeCompare(a.due||'0000'));
+
+  let h = '<div class="list-pane" style="padding:1rem 1.25rem;max-width:100%">';
+  h += '<div class="task-list">';
+  if(done.length===0) {
+    h += `<div class="empty"><div class="empty-icon">📋</div>No completed tasks yet.</div>`;
+  } else {
+    h += `<div style="margin-bottom:0.5rem;font-size:0.72rem;color:var(--g400)">${done.length} completed task${done.length!==1?'s':''}</div>`;
+    done.forEach(t=>{ h+=renderTaskCard(t); });
+  }
+  h += '</div></div>';
+  return h;
 }
 
 function renderTaskCard(t) {
