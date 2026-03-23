@@ -912,9 +912,18 @@ function groupTasksBy(list) {
     if(!seen.has(key)) seen.set(key, []);
     seen.get(key).push(t);
   });
-  // Sort the group keys
+  // Sort the group headers
   const keys = seen.has('__all__') ? ['__all__'] : sortGroupKeys([...seen.keys()]);
-  return keys.map(key => ({key, tasks: seen.get(key)}));
+  const po = {High:0,Medium:1,Low:2};
+  return keys.map(key => {
+    // Sort tasks within each group by due date ascending, then priority
+    const sorted = seen.get(key).slice().sort((a,b) => {
+      const ad = a.due||'9999', bd = b.due||'9999';
+      if(ad !== bd) return ad < bd ? -1 : 1;
+      return (po[a.priority]||1) - (po[b.priority]||1);
+    });
+    return {key, tasks: sorted};
+  });
 }
 
 function renderListView() {
@@ -1052,8 +1061,13 @@ function renderDetailPane(t) {
     ${t.person?`<div class="detail-field"><div class="detail-label">Person</div><div class="detail-value">👤 ${esc(t.person)}</div></div>`:''}
     ${t.company?`<div class="detail-field"><div class="detail-label">Company</div><div class="detail-value">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div class="detail-field"><div class="detail-label">Notes</div><div class="detail-notes">${esc(t.notes)}</div></div>`:''}
-    <div class="detail-actions">
-      <button class="btn ${(t.done||t.status==='Completed')?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null)">${(t.done||t.status==='Completed')?'↩ Uncheck':'✓ Complete'}</button>
+    <div class="detail-actions" style="align-items:center">
+      <button onclick="toggleDone('${t.id}',null)" title="${(t.done||t.status==='Completed')?'Mark incomplete':'Mark complete'}"
+        style="width:28px;height:28px;border-radius:50%;border:2px solid ${(t.done||t.status==='Completed')?'var(--green)':'var(--g200)'};
+        background:${(t.done||t.status==='Completed')?'var(--green)':'transparent'};cursor:pointer;display:flex;align-items:center;
+        justify-content:center;flex-shrink:0;transition:all 0.2s;padding:0;font-size:13px;font-weight:700;color:white">
+        ${(t.done||t.status==='Completed')?'✓':''}
+      </button>
       <button class="btn btn-ghost" onclick="detailEditing=true;render()">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}')">Delete</button>
