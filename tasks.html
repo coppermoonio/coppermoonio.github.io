@@ -266,13 +266,14 @@ html { overflow-x: hidden; }
 .task-card.overdue { background: #FFF8F8; }
 .task-card-top { display: flex; align-items: flex-start; gap: 0.65rem; }
 .task-cb {
-  flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
-  border: 2px solid var(--g200); background: transparent; cursor: pointer;
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--g300, #CBD5E1); background: transparent; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  margin-top: 2px; padding: 0; transition: all 0.2s;
+  margin-top: 1px; padding: 0; transition: all 0.2s;
 }
+.task-cb:hover:not(.checked) { border-color: var(--green); background: rgba(16,185,129,0.08); }
 .task-cb.checked { background: var(--green); border-color: var(--green); }
-.task-cb.checked::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
+.task-cb.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
 .task-body { flex: 1; min-width: 0; }
 .task-title-text { font-size: 0.85rem; font-weight: 500; color: var(--navy); line-height: 1.4; }
 .task-card.done .task-title-text { text-decoration: line-through; color: var(--g400); }
@@ -286,6 +287,11 @@ html { overflow-x: hidden; }
 .badge-Medium { background: #FEF3C7; color: #92400E; }
 .badge-Low { background: var(--g50); color: var(--g600); }
 .badge-Pending { background: var(--g50); color: var(--g600); }
+.status-label { font-size: 0.6rem; font-weight: 600; padding: 0; background: none; color: var(--g400); }
+.status-label.badge-Pending { color: var(--g400); }
+.status-label.badge-InProgress { color: var(--amber); }
+.status-label.badge-Assigned { color: var(--purple); }
+.status-label.badge-Completed { color: var(--green); }
 .badge-InProgress { background: #FFFBEB; color: #92400E; }
 .badge-Completed { background: #F0FDF4; color: #065F46; }
 .badge-Assigned { background: #F5F3FF; color: var(--purple); }
@@ -978,7 +984,7 @@ function renderTaskCard(t) {
         <div class="task-meta">
           <span class="badge badge-${t.category}">${t.category}</span>
           <span class="badge badge-${t.priority}">${t.priority}</span>
-          <span class="badge badge-${t.status.replace(' ','')}">${t.status}</span>
+          <span class="status-label badge-${t.status.replace(' ','')}">${t.status}</span>
           ${dl?`<span class="task-due ${dc}">${esc(dl)}</span>`:''}
           ${t.person?`<span class="task-person-info">👤 ${esc(t.person)}</span>`:''}
           ${t.company?`<span class="task-person-info">🏢 ${esc(t.company)}</span>`:''}
