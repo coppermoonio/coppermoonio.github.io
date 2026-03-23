@@ -618,7 +618,7 @@ function showBottomSheet(t) {
     ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.85rem">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.82rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
-      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${t.done?'↩ Uncheck':'✓ Complete'}</button>
+      <button class="btn ${(t.done||t.status==='Completed')?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${(t.done||t.status==='Completed')?'↩ Uncheck':'✓ Complete'}</button>
       <button class="btn btn-ghost" onclick="openEditSheet('${t.id}')">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeBottomSheet()">Delete</button>
@@ -972,7 +972,7 @@ function renderTaskCard(t) {
   return `<div class="task-card${t.done?' done':''}${over?' overdue':''}${sel?' selected':''}" 
     style="border-left-color:var(--cat-${ck}-border)" onclick="selectTask('${t.id}')">
     <div class="task-card-top">
-      <button class="task-cb${t.done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
+      <button class="task-cb${(t.done||t.status==='Completed')?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
       <div class="task-body">
         <div class="task-title-text">${esc(t.title)}</div>
         <div class="task-meta">
@@ -1031,7 +1031,7 @@ function renderDetailPane(t) {
     ${t.company?`<div class="detail-field"><div class="detail-label">Company</div><div class="detail-value">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div class="detail-field"><div class="detail-label">Notes</div><div class="detail-notes">${esc(t.notes)}</div></div>`:''}
     <div class="detail-actions">
-      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null)">${t.done?'Mark Active':'✓ Complete'}</button>
+      <button class="btn ${(t.done||t.status==='Completed')?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null)">${(t.done||t.status==='Completed')?'↩ Uncheck':'✓ Complete'}</button>
       <button class="btn btn-ghost" onclick="detailEditing=true;render()">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}')">Delete</button>
@@ -1137,7 +1137,7 @@ function showKanbanModal(t) {
     ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.83rem">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.8rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
-      <button class="btn ${t.done?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeKanbanModal()">${t.done?'Mark Active':'✓ Complete'}</button>
+      <button class="btn ${(t.done||t.status==='Completed')?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeKanbanModal()">${(t.done||t.status==='Completed')?'↩ Uncheck':'✓ Complete'}</button>
       <button class="btn btn-ghost" onclick="closeKanbanModal();view='list';selectedId='${t.id}';detailEditing=true;render()">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeKanbanModal()">Delete</button>
