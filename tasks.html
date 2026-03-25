@@ -452,7 +452,7 @@ html { overflow-x: hidden; }
     </div>
     <div class="topbar-right" id="topbar-right"></div>
   </div>
-  <div class="statsbar" id="statsbar"></div>
+  <div class="statsbar" id="statsbar"><span id="sync-status" style="font-size:0.7rem;opacity:0;transition:opacity 0.5s;margin-right:8px;font-weight:500;"></span><span id="sync-status" style="font-size:0.7rem;color:var(--green);opacity:0;transition:opacity 0.5s;margin-right:8px;"></span></div>
   <div class="view-tabs" id="view-tabs"></div>
   <div class="listen-banner" id="listen-banner" style="display:none">🎤 Listening… speak your task title</div>
   <div class="toolbar" id="toolbar"></div>
@@ -483,6 +483,12 @@ const CATS = ['Coppermoon','Recruiters','NeoSci','Personal'];
 const PRIS = ['High','Medium','Low'];
 const STATS = ['Pending','In Progress','Completed','Assigned'];
 const SK = 'cm_tasks_v3';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxcD-EXkIA167Q3egTViyBHP5I4txcupZpafxhFkxUgyLEHG0ogtj3aQ5yy_v3hFMQSww/exec';
+let sheetsSynced = false;
+let saveTimer = null;
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxcD-EXkIA167Q3egTViyBHP5I4txcupZpafxhFkxUgyLEHG0ogtj3aQ5yy_v3hFMQSww/exec';
+let sheetsSynced = false;
+let saveTimer = null;
 const TODAY = new Date().toISOString().split('T')[0];
 
 const DEFAULTS = [
@@ -513,13 +519,68 @@ let recognition = null;
 let dragId = null;
 
 function load() {
+  // Load from localStorage immediately so UI is fast
   try {
     const s = localStorage.getItem(SK);
     tasks = s ? JSON.parse(s) : DEFAULTS.map(t=>({...t}));
   } catch { tasks = DEFAULTS.map(t=>({...t})); }
   tasks = tasks.map(t => ({status:'Pending',time:'',person:'',company:'',...t}));
+  // Then sync from Google Sheets in background
+  loadFromSheets();
 }
-function save() { try { localStorage.setItem(SK, JSON.stringify(tasks)); } catch {} }
+
+async function loadFromSheets() {
+  try {
+    const res = await fetch(SHEETS_URL + '?action=read');
+    const data = await res.json();
+    if (data.tasks && data.tasks.length > 0) {
+      tasks = data.tasks.map(t => ({
+        status:'Pending',time:'',person:'',company:'',
+        ...t,
+        done: t.done === true || t.done === 'TRUE' || t.done === 'true'
+      }));
+      localStorage.setItem(SK, JSON.stringify(tasks));
+      sheetsSynced = true;
+      render();
+      showSyncStatus('✓ Synced from Sheets');
+    } else {
+      // Sheet is empty - push localStorage data up
+      saveToSheets();
+    }
+  } catch(e) {
+    showSyncStatus('⚠ Offline - local only');
+  }
+}
+
+async function saveToSheets() {
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'write', tasks }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    sheetsSynced = true;
+    showSyncStatus('✓ Saved to Sheets');
+  } catch(e) {
+    showSyncStatus('⚠ Save failed - local only');
+  }
+}
+
+function showSyncStatus(msg) {
+  let el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 3000);
+}
+
+function save() {
+  // Always save to localStorage immediately
+  try { localStorage.setItem(SK, JSON.stringify(tasks)); } catch {}
+  // Debounce Sheets save - wait 1.5s after last change
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveToSheets(), 1500);
+}
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function genId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
