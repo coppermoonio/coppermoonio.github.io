@@ -186,10 +186,14 @@ html { overflow-x: hidden; }
   .list-pane.with-detail { flex: none; }
   .detail-pane { display: none !important; }
   .topbar { padding: 0.65rem 0.75rem; }
-  .statsbar { padding: 0.4rem 0.75rem; }
-  .toolbar { padding: 0.5rem 0.75rem; }
-  .task-card { border-radius: 8px; }
-  .task-meta { gap: 0.25rem; }
+  .statsbar { padding: 0.4rem 0.75rem; overflow-x: hidden; }
+  .toolbar { padding: 0.5rem 0.75rem; overflow-x: hidden; }
+  .task-card { border-radius: 8px; max-width: 100%; overflow: hidden; }
+  .task-meta { gap: 0.25rem; flex-wrap: wrap; max-width: 100%; }
+  .task-title-text { word-break: break-word; }
+  .task-person-info { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #main-content { overflow-x: hidden; max-width: 100vw; }
+  .task-list { overflow-x: hidden; }
 }
 
 /* MOBILE BOTTOM SHEET */
@@ -457,7 +461,7 @@ html { overflow-x: hidden; }
 
 <script>
 // ─── PASSWORD ────────────────────────────────────────────────────────────────
-const PW = 'copper2026';
+const PW = '1953';
 function checkPw() {
   const v = document.getElementById('pw-input').value;
   if(v === PW) {
@@ -628,7 +632,12 @@ function showBottomSheet(t) {
     ${t.company?`<div style="margin-bottom:0.5rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Company</div><div style="font-size:0.85rem">🏢 ${esc(t.company)}</div></div>`:''}
     ${t.notes?`<div style="margin-bottom:0.75rem"><div style="font-size:0.65rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem">Notes</div><div style="font-size:0.82rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.6rem 0.75rem">${esc(t.notes)}</div></div>`:''}
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
-      <button class="btn ${(t.done||t.status==='Completed')?'btn-ghost':'btn-primary'}" onclick="toggleDone('${t.id}',null);closeBottomSheet()">${(t.done||t.status==='Completed')?'↩ Uncheck':'✓ Complete'}</button>
+      <button onclick="toggleDone('${t.id}',null);closeBottomSheet()" title="${(t.done||t.status==='Completed')?'Mark incomplete':'Mark complete'}"
+        style="width:28px;height:28px;border-radius:50%;border:2px solid ${(t.done||t.status==='Completed')?'var(--green)':'var(--g200)'};
+        background:${(t.done||t.status==='Completed')?'var(--green)':'transparent'};cursor:pointer;display:flex;align-items:center;
+        justify-content:center;flex-shrink:0;transition:all 0.2s;padding:0;font-size:13px;font-weight:700;color:white">
+        ${(t.done||t.status==='Completed')?'✓':''}
+      </button>
       <button class="btn btn-ghost" onclick="openEditSheet('${t.id}')">Edit</button>
       <a class="btn btn-ghost" href="${gcalUrl(t)}" target="_blank">📅 Cal</a>
       <button class="btn btn-danger" onclick="deleteTask('${t.id}');closeBottomSheet()">Delete</button>
@@ -1285,7 +1294,20 @@ function calDrop(e,ds){
 }
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
-function init() { load(); render(); }
+function init() {
+  load();
+  render();
+  // Pre-request microphone permission so browser remembers it
+  // This runs silently - if granted, future uses won't prompt
+  if(window.SpeechRecognition || window.webkitSpeechRecognition) {
+    navigator.mediaDevices && navigator.mediaDevices.getUserMedia({audio: true})
+      .then(stream => {
+        // Permission granted - stop the stream immediately, we just wanted the grant
+        stream.getTracks().forEach(t => t.stop());
+      })
+      .catch(() => {}); // Silently ignore if denied
+  }
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedId=null;detailEditing=false;closeBottomSheet();closeKanbanModal();render();}});
 </script>
 </body>
