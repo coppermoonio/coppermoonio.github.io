@@ -67,7 +67,7 @@ html { overflow-x: hidden; }
 .topbar {
   background: var(--navy); padding: 0.65rem 1.25rem;
   display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 100;
+  flex-shrink: 0;
   box-shadow: 0 2px 12px rgba(0,0,0,0.3);
   /* FIX: prevent overflow on mobile */
   min-width: 0;
@@ -100,7 +100,7 @@ html { overflow-x: hidden; }
   background: white; border-bottom: 1px solid var(--g100);
   padding: 0.4rem 1.25rem; display: flex; align-items: center; gap: 1rem;
   flex-wrap: wrap; font-size: 0.75rem; color: var(--g400);
-  position: sticky; top: 52px; z-index: 99;
+  flex-shrink: 0;
 }
 .statsbar .overdue { color: var(--red); font-weight: 700; }
 .statsbar .today-stat { color: var(--amber); font-weight: 600; }
@@ -109,7 +109,7 @@ html { overflow-x: hidden; }
 .view-tabs {
   background: white; border-bottom: 2px solid var(--g100);
   display: flex; padding: 0 1.25rem; overflow-x: auto;
-  position: sticky; top: 85px; z-index: 98;
+  flex-shrink: 0;
 }
 .view-tab {
   padding: 0.65rem 1.1rem; border: none; background: transparent;
@@ -125,7 +125,7 @@ html { overflow-x: hidden; }
   padding: 0.6rem 1.25rem; display: flex; align-items: center;
   gap: 0.6rem; flex-wrap: wrap; background: var(--off);
   border-bottom: 1px solid var(--g100);
-  position: sticky; top: 120px; z-index: 97;
+  flex-shrink: 0;
 }
 .search-wrap { position: relative; flex: 1; min-width: 140px; max-width: 280px; }
 .search-wrap input {
@@ -173,7 +173,7 @@ html { overflow-x: hidden; }
 
 /* MAIN LAYOUT - SPLIT VIEW */
 .main-layout {
-  display: flex; height: calc(100vh - 130px); overflow: hidden;
+  display: flex; height: 100%; overflow: hidden;
 }
 .list-pane {
   flex: 1; overflow-y: auto; padding: 1rem 1.25rem;
@@ -191,8 +191,8 @@ html { overflow-x: hidden; }
 .detail-pane.open { flex: 0 0 48%; }
 
 @media(max-width: 768px) {
-  .main-layout { flex-direction: column; height: auto; overflow: visible; }
-  .list-pane { height: auto; overflow: visible; padding: 0.75rem; }
+  .main-layout { flex-direction: column; height: 100%; overflow: hidden; }
+  .list-pane { height: 100%; overflow-y: auto; overflow-x: hidden; padding: 0.75rem; max-width: 100vw; }
   .list-pane.with-detail { flex: none; }
   .detail-pane { display: none !important; }
   .topbar { padding: 0.65rem 0.75rem; }
@@ -454,7 +454,7 @@ html { overflow-x: hidden; }
 </div>
 
 <!-- APP (hidden until pw) -->
-<div id="app" style="display:none">
+<div id="app" style="display:none;height:100vh;display:flex;flex-direction:column;overflow:hidden">
   <div class="topbar">
     <div class="topbar-left">
       <img src="coppermoon-logo-nav.png" alt="Coppermoon" onerror="this.style.display='none'">
@@ -466,7 +466,7 @@ html { overflow-x: hidden; }
   <div class="view-tabs" id="view-tabs"></div>
   <div class="listen-banner" id="listen-banner" style="display:none">🎤 Listening… speak your task title</div>
   <div class="toolbar" id="toolbar"></div>
-  <div id="main-content"></div>
+  <div id="main-content" style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch"></div>
 </div>
 
 <script>
