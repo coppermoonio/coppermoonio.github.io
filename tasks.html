@@ -38,7 +38,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--
 .task-list, .task-card, .task-meta, .task-body, .task-title-text { max-width: 100% !important; overflow-wrap: break-word !important; word-break: break-word !important; }
 .task-meta { flex-wrap: wrap !important; }
 .task-person-info { max-width: 45vw !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
-html { overflow-x: hidden; }
+html { overflow-x: hidden; height: 100%; }
+body { height: 100%; }
+#app { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+#app[style*="flex"] { display: flex !important; }
 
 /* PASSWORD SCREEN */
 #pw-screen {
@@ -291,7 +294,7 @@ html { overflow-x: hidden; }
 .task-body { flex: 1; min-width: 0; }
 .task-title-text { font-size: 0.85rem; font-weight: 500; color: var(--navy); line-height: 1.4; }
 .task-card.done .task-title-text { text-decoration: line-through; color: var(--g400); }
-.task-meta { display: flex; gap: 0.3rem; margin-top: 0.25rem; flex-wrap: wrap; align-items: center; }
+.task-meta { display: flex; gap: 0.3rem; margin-top: 0.25rem; flex-wrap: wrap; align-items: center; overflow: hidden; max-width: 100%; }
 .badge { font-size: 0.6rem; padding: 0.08rem 0.45rem; border-radius: 10px; font-weight: 600; white-space: nowrap; }
 .badge-Coppermoon { background: var(--cat-cm-bg); color: var(--cat-cm-text); }
 .badge-Recruiters { background: var(--cat-re-bg); color: var(--cat-re-text); }
@@ -309,7 +312,7 @@ html { overflow-x: hidden; }
 .badge-InProgress { background: #FFFBEB; color: #92400E; }
 .badge-Completed { background: #F0FDF4; color: #065F46; }
 .badge-Assigned { background: #F5F3FF; color: var(--purple); }
-.task-due { font-size: 0.62rem; color: var(--g400); }
+.task-due { font-size: 0.62rem; color: var(--g400); max-width: 55vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
 .task-due.overdue-text { color: var(--red); font-weight: 700; }
 .task-due.today-text { color: var(--amber); font-weight: 600; }
 .task-person-info { font-size: 0.62rem; color: var(--g600); }
@@ -454,7 +457,7 @@ html { overflow-x: hidden; }
 </div>
 
 <!-- APP (hidden until pw) -->
-<div id="app" style="display:none;height:100vh;display:flex;flex-direction:column;overflow:hidden">
+<div id="app" style="display:none">
   <div class="topbar">
     <div class="topbar-left">
       <img src="coppermoon-logo-nav.png" alt="Coppermoon" onerror="this.style.display='none'">
@@ -476,7 +479,7 @@ function checkPw() {
   const v = document.getElementById('pw-input').value;
   if(v === PW) {
     document.getElementById('pw-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+    document.getElementById('app').style.display = 'flex';
     init();
   } else {
     document.getElementById('pw-error').style.display = 'block';
