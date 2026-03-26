@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Coppermoon Tasks</title>
+<title>Coppermoon Tasks v4</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -35,6 +35,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; max-width: 100vw; position: relative; }
 * { box-sizing: border-box; }
+.badge, .status-label, .task-due { max-width: 50vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
 .task-list, .task-card, .task-meta, .task-body, .task-title-text { max-width: 100% !important; overflow-wrap: break-word !important; word-break: break-word !important; }
 .task-meta { flex-wrap: wrap !important; }
 .task-person-info { max-width: 45vw !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
@@ -179,8 +180,8 @@ body { height: 100%; }
   display: flex; height: 100%; overflow: hidden;
 }
 .list-pane {
-  flex: 1; overflow-y: auto; padding: 1rem 1.25rem;
-  min-width: 0;
+  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 1rem 1.25rem;
+  min-width: 0; max-width: 100%;
   transition: flex 0.3s ease;
 }
 .list-pane.with-detail { flex: 0 0 52%; }
