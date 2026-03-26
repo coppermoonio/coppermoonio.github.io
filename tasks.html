@@ -33,7 +33,11 @@
   --cat-pe-bg: #FDF2F8; --cat-pe-border: #DB2777; --cat-pe-text: #9D174D;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; max-width: 100vw; }
+body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; max-width: 100vw; position: relative; }
+* { box-sizing: border-box; }
+.task-list, .task-card, .task-meta, .task-body, .task-title-text { max-width: 100% !important; overflow-wrap: break-word !important; word-break: break-word !important; }
+.task-meta { flex-wrap: wrap !important; }
+.task-person-info { max-width: 45vw !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
 html { overflow-x: hidden; }
 
 /* PASSWORD SCREEN */
@@ -532,6 +536,25 @@ function load() {
   loadFromSheets();
 }
 
+function fixSheetDate(val) {
+  if (!val || val === '') return '';
+  const s = String(val).trim();
+  // Already a valid YYYY-MM-DD string
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+  // Google Sheets serial number (integer like 46000)
+  if (/^\d{4,6}$/.test(s)) {
+    const d = new Date((Number(s) - 25569) * 86400000);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  // ISO string like 2026-04-02T00:00:00.000Z
+  if (s.includes('T') || s.includes('Z')) {
+    try { return new Date(s).toISOString().slice(0,10); } catch(e) { return ''; }
+  }
+  // 1899 date (Google epoch error) - return empty
+  if (s.startsWith('1899') || s.startsWith('1900')) return '';
+  return s.slice(0,10);
+}
+
 async function loadFromSheets() {
   try {
     const res = await fetch(SHEETS_URL + '?action=read');
@@ -542,9 +565,7 @@ async function loadFromSheets() {
         ...t,
         done: t.done === true || t.done === 'TRUE' || t.done === 'true',
         // Fix dates that come back as numbers from Sheets
-        due: (t.due && !isNaN(t.due) && String(t.due).length > 4)
-          ? new Date((Number(t.due) - 25569) * 86400000).toISOString().slice(0,10)
-          : (t.due || '')
+        due: fixSheetDate(t.due)
       }));
       // Deduplicate by id
       const seen = new Map();
