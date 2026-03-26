@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Coppermoon Tasks</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
@@ -600,7 +603,7 @@ function save() {
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function genId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 function esc(s) { if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function daysBetween(d1,d2) { return Math.round((new Date(d1)-new Date(d2))/86400000); }
+function daysBetween(d1,d2) { return Math.round((new Date(String(d1).slice(0,10))-new Date(String(d2).slice(0,10)))/86400000); }
 function formatDate(d) { if(!d)return''; return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 function formatDateLong(d) { if(!d)return''; return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}); }
 function gcalUrl(t) {
@@ -610,8 +613,8 @@ function gcalUrl(t) {
   if(t.time){const[h,m]=t.time.split(':');const eh=(parseInt(h)+1).toString().padStart(2,'0');return`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}T${h}${m}00/${d}T${eh}${m}00&details=${det}&ctz=America/Denver`;}
   return`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${d}/${d}&details=${det}`;
 }
-function isOver(t) { return !t.done && t.status!=='Completed' && t.due && t.due < TODAY; }
-function isToday(t) { return !t.done && t.status!=='Completed' && t.due === TODAY; }
+function isOver(t) { const d = t.due ? String(t.due).slice(0,10) : ''; return !t.done && t.status!=='Completed' && d && d < TODAY; }
+function isToday(t) { const d = t.due ? String(t.due).slice(0,10) : ''; return !t.done && t.status!=='Completed' && d === TODAY; }
 function catKey(c) { return c==='Coppermoon'?'cm':c==='Recruiters'?'re':c==='NeoSci'?'ns':'pe'; }
 function dueLabel(t) {
   if(!t.due) return '';
