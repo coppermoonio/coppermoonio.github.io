@@ -483,7 +483,7 @@ const CATS = ['Coppermoon','Recruiters','NeoSci','Personal'];
 const PRIS = ['High','Medium','Low'];
 const STATS = ['Pending','In Progress','Completed','Assigned'];
 const SK = 'cm_tasks_v3';
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxcD-EXkIA167Q3egTViyBHP5I4txcupZpafxhFkxUgyLEHG0ogtj3aQ5yy_v3hFMQSww/exec';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyD1ACXyz-hnciNqvPpU7Lb7y6VLZg0sQEWGm5dgxgKubdHavbOZ6ymlzkp_PvHcZHoJg/exec';
 let sheetsSynced = false;
 let saveTimer = null;
 const TODAY = new Date().toISOString().split('T')[0];
@@ -551,15 +551,17 @@ async function loadFromSheets() {
 
 async function saveToSheets() {
   try {
-    await fetch(SHEETS_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'write', tasks }),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    sheetsSynced = true;
-    showSyncStatus('✓ Saved to Sheets');
+    const encoded = encodeURIComponent(JSON.stringify(tasks));
+    const res = await fetch(SHEETS_URL + '?action=write&tasks=' + encoded);
+    const data = await res.json();
+    if (data.success) {
+      sheetsSynced = true;
+      showSyncStatus('synced');
+    } else {
+      showSyncStatus('offline');
+    }
   } catch(e) {
-    showSyncStatus('⚠ Save failed - local only');
+    showSyncStatus('offline');
   }
 }
 
@@ -1067,18 +1069,18 @@ function renderTaskCard(t) {
   const ck=catKey(t.category);
   const sel=selectedId===t.id;
   return `<div class="task-card${t.done?' done':''}${over?' overdue':''}${sel?' selected':''}" 
-    style="border-left-color:var(--cat-${ck}-border)" onclick="selectTask('${t.id}')">
-    <div class="task-card-top">
+    style="border-left-color:var(--cat-${ck}-border);max-width:100%;box-sizing:border-box;overflow:hidden" onclick="selectTask('${t.id}')">
+    <div class="task-card-top" style="max-width:100%;overflow:hidden">
       <button class="task-cb${(t.done||t.status==='Completed')?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
-      <div class="task-body">
-        <div class="task-title-text">${esc(t.title)}</div>
-        <div class="task-meta">
+      <div class="task-body" style="min-width:0;overflow:hidden;max-width:100%">
+        <div class="task-title-text" style="word-break:break-word;white-space:normal">${esc(t.title)}</div>
+        <div class="task-meta" style="flex-wrap:wrap;overflow:hidden;max-width:100%">
           <span class="badge badge-${t.category}">${t.category}</span>
           <span class="badge badge-${t.priority}">${t.priority}</span>
           <span class="status-label badge-${t.status.replace(' ','')}">${t.status}</span>
           ${dl?`<span class="task-due ${dc}">${esc(dl)}</span>`:''}
-          ${t.person?`<span class="task-person-info">👤 ${esc(t.person)}</span>`:''}
-          ${t.company?`<span class="task-person-info">🏢 ${esc(t.company)}</span>`:''}
+          ${t.person?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">👤 ${esc(t.person)}</span>`:''}
+          ${t.company?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏢 ${esc(t.company)}</span>`:''}
         </div>
       </div>
     </div>
