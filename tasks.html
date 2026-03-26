@@ -30,7 +30,7 @@
   --cat-pe-bg: #FDF2F8; --cat-pe-border: #DB2777; --cat-pe-text: #9D174D;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); min-height: 100vh; overflow-x: hidden; max-width: 100vw; }
 html { overflow-x: hidden; }
 
 /* PASSWORD SCREEN */
@@ -93,6 +93,7 @@ html { overflow-x: hidden; }
   background: white; border-bottom: 1px solid var(--g100);
   padding: 0.4rem 1.25rem; display: flex; align-items: center; gap: 1rem;
   flex-wrap: wrap; font-size: 0.75rem; color: var(--g400);
+  position: sticky; top: 52px; z-index: 99;
 }
 .statsbar .overdue { color: var(--red); font-weight: 700; }
 .statsbar .today-stat { color: var(--amber); font-weight: 600; }
@@ -101,6 +102,7 @@ html { overflow-x: hidden; }
 .view-tabs {
   background: white; border-bottom: 2px solid var(--g100);
   display: flex; padding: 0 1.25rem; overflow-x: auto;
+  position: sticky; top: 85px; z-index: 98;
 }
 .view-tab {
   padding: 0.65rem 1.1rem; border: none; background: transparent;
@@ -116,6 +118,7 @@ html { overflow-x: hidden; }
   padding: 0.6rem 1.25rem; display: flex; align-items: center;
   gap: 0.6rem; flex-wrap: wrap; background: var(--off);
   border-bottom: 1px solid var(--g100);
+  position: sticky; top: 120px; z-index: 97;
 }
 .search-wrap { position: relative; flex: 1; min-width: 140px; max-width: 280px; }
 .search-wrap input {
@@ -505,7 +508,7 @@ let tasks = [];
 let view = 'list';
 let filterCat = 'All';
 let search = '';
-let sortBy = 'priority';
+let sortBy = 'due';
 let sortDir = 1;
 let showForm = false;
 let selectedId = null;
@@ -531,17 +534,24 @@ async function loadFromSheets() {
     const res = await fetch(SHEETS_URL + '?action=read');
     const data = await res.json();
     if (data.tasks && data.tasks.length > 0) {
-      tasks = data.tasks.map(t => ({
+      const raw = data.tasks.map(t => ({
         status:'Pending',time:'',person:'',company:'',
         ...t,
-        done: t.done === true || t.done === 'TRUE' || t.done === 'true'
+        done: t.done === true || t.done === 'TRUE' || t.done === 'true',
+        // Fix dates that come back as numbers from Sheets
+        due: (t.due && !isNaN(t.due) && String(t.due).length > 4)
+          ? new Date((Number(t.due) - 25569) * 86400000).toISOString().slice(0,10)
+          : (t.due || '')
       }));
+      // Deduplicate by id
+      const seen = new Map();
+      raw.forEach(t => { if(t.id) seen.set(String(t.id), t); });
+      tasks = Array.from(seen.values());
       localStorage.setItem(SK, JSON.stringify(tasks));
       sheetsSynced = true;
       render();
-      showSyncStatus('✓ Synced from Sheets');
+      showSyncStatus('synced');
     } else {
-      // Sheet is empty - push localStorage data up
       saveToSheets();
     }
   } catch(e) {
@@ -924,11 +934,11 @@ function renderToolbar() {
       h += `<option value="${k}"${sortBy===k?' selected':''}>${l}</option>`;
     });
     h += `</select><button class="sort-dir-btn" onclick="sortDir=sortDir*-1;render()" title="Reverse sort direction">${sortDir===1?'↑':'↓'}</button></div>`;
-    h += '<div class="cat-filters">';
+    h += `<div class="sort-wrap"><label>Category:</label><select class="sort-select" onchange="filterCat=this.value;render()">`;
     ['All',...CATS].forEach(c=>{
-      h += `<button class="cat-btn${filterCat===c?' active-'+c:''}" onclick="filterCat='${c}';render()">${c}</button>`;
+      h += `<option value="${c}"${filterCat===c?' selected':''}>${c}</option>`;
     });
-    h += '</div>';
+    h += `</select></div>`;
     document.getElementById('toolbar').innerHTML = h;
 
     // FIX: Attach search listener directly to the DOM element — no inline oninput
