@@ -551,15 +551,21 @@ async function loadFromSheets() {
 
 async function saveToSheets() {
   try {
-    const encoded = encodeURIComponent(JSON.stringify(tasks));
-    const res = await fetch(SHEETS_URL + '?action=write&tasks=' + encoded);
-    const data = await res.json();
-    if (data.success) {
-      sheetsSynced = true;
-      showSyncStatus('synced');
-    } else {
-      showSyncStatus('offline');
+    // Send tasks in chunks to avoid URL length limits
+    const CHUNK = 5;
+    // First clear the sheet
+    const clearRes = await fetch(SHEETS_URL + '?action=clear');
+    await clearRes.json();
+    // Then write header + tasks in chunks
+    for (let i = 0; i < tasks.length; i += CHUNK) {
+      const chunk = tasks.slice(i, i + CHUNK);
+      const encoded = encodeURIComponent(JSON.stringify(chunk));
+      const start = i;
+      const res = await fetch(SHEETS_URL + '?action=append&tasks=' + encoded + '&start=' + start);
+      await res.json();
     }
+    sheetsSynced = true;
+    showSyncStatus('synced');
   } catch(e) {
     showSyncStatus('offline');
   }
