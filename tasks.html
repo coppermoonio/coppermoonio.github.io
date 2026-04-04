@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Coppermoon Tasks v4</title>
+<title>Coppermoon Tasks v5</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1118,13 +1118,13 @@ function renderTaskCard(t) {
       <button class="task-cb${(t.done||t.status==='Completed')?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
       <div class="task-body" style="min-width:0;overflow:hidden;max-width:100%">
         <div class="task-title-text" style="word-break:break-word;white-space:normal">${esc(t.title)}</div>
-        <div class="task-meta" style="flex-wrap:wrap;overflow:hidden;max-width:100%">
+     <div class="task-meta" style="flex-wrap:wrap;overflow:hidden;max-width:100%;row-gap:0.15rem">
           <span class="badge badge-${t.category}">${t.category}</span>
           <span class="badge badge-${t.priority}">${t.priority}</span>
           <span class="status-label badge-${t.status.replace(' ','')}">${t.status}</span>
           ${dl?`<span class="task-due ${dc}">${esc(dl)}</span>`:''}
-          ${t.person?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">👤 ${esc(t.person)}</span>`:''}
-          ${t.company?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏢 ${esc(t.company)}</span>`:''}
+       ${t.person?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">👤 ${esc(t.person)}</span>`:''}
+${t.company?`<span class="task-person-info" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏢 ${esc(t.company)}</span>`:''}
         </div>
       </div>
     </div>
