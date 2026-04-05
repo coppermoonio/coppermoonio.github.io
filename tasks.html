@@ -324,8 +324,7 @@ function fixSheetDate(val){if(!val||val==='')return'';const s=String(val).trim()
 
 async function loadFromSheets(){try{const res=await fetch(SHEETS_URL+'?action=read');const data=await res.json();if(data.tasks&&data.tasks.length>0){const raw=data.tasks.map(t=>({status:'Pending',time:'',person:'',company:'',...t,done:t.done===true||t.done==='TRUE'||t.done==='true',due:fixSheetDate(t.due)}));const seen=new Map();raw.forEach(t=>{if(t.id)seen.set(String(t.id),t);});tasks=Array.from(seen.values());localStorage.setItem(SK,JSON.stringify(tasks));sheetsSynced=true;render();showSyncStatus('synced');}else{saveToSheets();}}catch(e){showSyncStatus('⚠ Offline');}}
 
-async function saveToSheets(){try{const CHUNK=5;const clearRes=await fetch(SHEETS_URL+'?action=clear');await clearRes.json();for(let i=0;i<tasks.length;i+=CHUNK){const chunk=tasks.slice(i,i+CHUNK);const encoded=encodeURIComponent(JSON.stringify(chunk));const res=await fetch(SHEETS_URL+'?action=append&tasks='+encoded+'&start='+i);await res.json();}sheetsSynced=true;showSyncStatus('synced');}catch(e){showSyncStatus('offline');}}
-
+async function saveToSheets(){try{const encoded=encodeURIComponent(JSON.stringify(tasks));const res=await fetch(SHEETS_URL+'?action=write&tasks='+encoded);const data=await res.json();if(data.ok){sheetsSynced=true;showSyncStatus('synced');}else{showSyncStatus('⚠ Save failed');console.error('Save failed:',data.error);}}catch(e){showSyncStatus('offline');console.error('Save error:',e);}}
 function showSyncStatus(msg){let el=document.getElementById('sync-status');if(!el)return;el.textContent=msg;el.style.opacity='1';setTimeout(()=>{el.style.opacity='0';},3000);}
 function save(){try{localStorage.setItem(SK,JSON.stringify(tasks));}catch{}if(saveTimer)clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveToSheets(),1500);}
 
