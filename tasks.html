@@ -310,7 +310,7 @@ function addTask(data) {
 function toggleDone(id, e) {
   if (e) e.stopPropagation();
   tasks = tasks.map(t => {
-    if (t.id !== id) return t;
+    if (String(t.id) !== String(id)) return t;
     const done = !isDone(t);
     return { ...t, done, status: done ? 'Completed' : 'Pending', completedDate: done ? TODAY : '' };
   });
@@ -319,12 +319,12 @@ function toggleDone(id, e) {
 
 function deleteTask(id) {
   if (!confirm('Delete this task?')) return;
-  tasks = tasks.filter(t => t.id !== id);
+  tasks = tasks.filter(t => String(t.id) !== String(id));
   closeSheet(); save(); render();
 }
 
 function updateTask(id, data) {
-  tasks = tasks.map(t => t.id !== id ? t : { ...t, ...data });
+  tasks = tasks.map(t => String(t.id) !== String(id) ? t : { ...t, ...data });
   closeSheet(); save(); render();
 }
 
@@ -337,7 +337,7 @@ function openSheet(html) {
 }
 
 function openTaskDetail(id) {
-  const t = tasks.find(x => x.id === id);
+  const t = tasks.find(x => String(x.id) === String(id));
   if (!t) return;
   const over = isOver(t); const done = isDone(t);
   openSheet(`
@@ -368,7 +368,7 @@ function openTaskDetail(id) {
 }
 
 function openEditSheet(id) {
-  const t = tasks.find(x => x.id === id);
+  const t = tasks.find(x => String(x.id) === String(id));
   if (!t) return;
   openSheet(`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem">
@@ -570,9 +570,10 @@ function renderMain() {
 function renderCard(t) {
   const dl = dueLabel(t); const dc = dueCls(t);
   const done = isDone(t); const over = isOver(t);
-  return `<div class="task-card${done?' done':''}${over?' overdue':''}" style="border-left-color:${catBorder(t.category)}" onclick="openTaskDetail('${t.id}')">
+  const sid = String(t.id).replace(/'/g, '');
+  return `<div class="task-card${done?' done':''}${over?' overdue':''}" style="border-left-color:${catBorder(t.category)}" onclick="openTaskDetail('${sid}')">
     <div class="task-top">
-      <button class="task-cb${done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
+      <button class="task-cb${done?' checked':''}" onclick="toggleDone('${sid}',event)"></button>
       <div class="task-body">
         <div class="task-title">${esc(t.title)}</div>
         <div class="task-meta">
