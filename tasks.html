@@ -29,25 +29,15 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--g700); }
-
-/* APP SHELL */
 #app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
 /* TOPBAR */
-.topbar {
-  background: var(--navy); padding: 0.6rem 1rem;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0; gap: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
+.topbar { background: var(--navy); padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 .topbar-left { display: flex; align-items: center; gap: 0.6rem; }
 .topbar img { height: 26px; }
 .topbar h1 { color: white; font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
 .topbar-right { display: flex; gap: 0.35rem; align-items: center; }
-@media(max-width: 420px) {
-  .topbar h1 { display: none; }
-  .topbar img { height: 22px; }
-}
+@media(max-width: 420px) { .topbar h1 { display: none; } .topbar img { height: 22px; } }
 
 /* BUTTONS */
 .btn { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.35rem 0.75rem; border-radius: 7px; border: none; font-family: inherit; font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
@@ -56,73 +46,37 @@ html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM 
 .btn-ghost { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); }
 .btn-ghost-dark { background: white; color: var(--g600); border: 1px solid var(--g200); }
 .btn-danger { background: white; color: var(--red); border: 1px solid #FCA5A5; }
-.btn-sm { padding: 0.25rem 0.55rem; font-size: 0.72rem; }
 
-/* STATS BAR */
-.statsbar {
-  background: white; border-bottom: 1px solid var(--g100);
-  padding: 0.35rem 1rem; font-size: 0.73rem; color: var(--g400);
-  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-  flex-shrink: 0;
-}
+/* STATS */
+.statsbar { background: white; border-bottom: 1px solid var(--g100); padding: 0.35rem 1rem; font-size: 0.73rem; color: var(--g400); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; flex-shrink: 0; }
 .stat-overdue { color: var(--red); font-weight: 700; }
 .stat-today { color: var(--amber); font-weight: 600; }
 #sync-msg { font-size: 0.7rem; font-weight: 500; opacity: 0; transition: opacity 0.4s; margin-left: auto; }
 
 /* TABS */
-.tabs {
-  background: white; border-bottom: 2px solid var(--g100);
-  display: flex; padding: 0 1rem; flex-shrink: 0; overflow-x: auto;
-}
-.tab {
-  padding: 0.6rem 1rem; border: none; background: transparent;
-  font-family: inherit; font-size: 0.8rem; font-weight: 500;
-  color: var(--g400); cursor: pointer;
-  border-bottom: 2px solid transparent; margin-bottom: -2px;
-  white-space: nowrap; transition: color 0.15s;
-}
+.tabs { background: white; border-bottom: 2px solid var(--g100); display: flex; padding: 0 1rem; flex-shrink: 0; overflow-x: auto; }
+.tab { padding: 0.6rem 1rem; border: none; background: transparent; font-family: inherit; font-size: 0.8rem; font-weight: 500; color: var(--g400); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: color 0.15s; }
 .tab.active { color: var(--copper); border-bottom-color: var(--copper); font-weight: 700; }
 
 /* TOOLBAR */
-.toolbar {
-  padding: 0.5rem 1rem; display: flex; align-items: center;
-  gap: 0.5rem; flex-wrap: wrap; background: var(--off);
-  border-bottom: 1px solid var(--g100); flex-shrink: 0;
-}
+.toolbar { padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; background: var(--off); border-bottom: 1px solid var(--g100); flex-shrink: 0; }
 .search-wrap { position: relative; flex: 1; min-width: 120px; }
-.search-wrap input {
-  width: 100%; padding: 0.38rem 0.7rem 0.38rem 1.75rem;
-  border: 1px solid var(--g200); border-radius: 7px;
-  font-family: inherit; font-size: 0.78rem; background: white; outline: none;
-}
+.search-wrap input { width: 100%; padding: 0.38rem 0.7rem 0.38rem 1.75rem; border: 1px solid var(--g200); border-radius: 7px; font-family: inherit; font-size: 0.78rem; background: white; outline: none; }
 .search-wrap input:focus { border-color: var(--copper); }
 .search-icon { position: absolute; left: 0.5rem; top: 50%; transform: translateY(-50%); font-size: 0.7rem; color: var(--g400); pointer-events: none; }
-.filter-select {
-  padding: 0.35rem 0.5rem; border: 1px solid var(--g200); border-radius: 7px;
-  font-family: inherit; font-size: 0.75rem; background: white; outline: none; cursor: pointer;
-}
+.filter-select { padding: 0.35rem 0.5rem; border: 1px solid var(--g200); border-radius: 7px; font-family: inherit; font-size: 0.75rem; background: white; outline: none; cursor: pointer; }
 
-/* MAIN SCROLL AREA */
+/* MAIN */
 #main { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
 /* ADD FORM */
-.add-form {
-  background: white; border: 1px solid var(--g100); border-radius: 10px;
-  padding: 0.85rem; margin: 0.75rem 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.add-form input[type=text], .add-form textarea {
-  width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid var(--g200);
-  border-radius: 7px; font-family: inherit; font-size: 0.83rem;
-  margin-bottom: 0.45rem; outline: none;
-}
-.add-form input:focus, .add-form textarea:focus, .add-form select:focus { border-color: var(--copper); }
+.add-form { background: white; border: 1px solid var(--g100); border-radius: 10px; padding: 0.85rem; margin: 0.75rem 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.add-form input[type=text], .add-form textarea { width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid var(--g200); border-radius: 7px; font-family: inherit; font-size: 0.83rem; margin-bottom: 0.45rem; outline: none; }
+.add-form input:focus, .add-form textarea:focus { border-color: var(--copper); }
 .add-form textarea { resize: vertical; min-height: 50px; font-size: 0.78rem; }
 .form-row { display: flex; gap: 0.35rem; margin-bottom: 0.45rem; flex-wrap: wrap; }
-.form-row select, .form-row input[type=date], .form-row input[type=time] {
-  flex: 1; padding: 0.42rem 0.5rem; border: 1.5px solid var(--g200);
-  border-radius: 7px; font-family: inherit; font-size: 0.75rem;
-  min-width: 85px; outline: none; background: white;
-}
+.form-row select, .form-row input[type=date], .form-row input[type=time] { flex: 1; padding: 0.42rem 0.5rem; border: 1.5px solid var(--g200); border-radius: 7px; font-family: inherit; font-size: 0.75rem; min-width: 85px; outline: none; background: white; }
+.form-row select:focus, .form-row input:focus { border-color: var(--copper); }
 .form-actions { display: flex; gap: 0.35rem; }
 
 /* TASK LIST */
@@ -130,64 +84,25 @@ html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM 
 @media(max-width: 600px) { .task-list { padding: 0.5rem 0.6rem; } }
 
 /* SECTION HEADER */
-.section-hdr {
-  padding: 0.3rem 0.65rem; border-radius: 6px;
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em;
-  display: flex; justify-content: space-between; align-items: center;
-  margin: 0.5rem 0 0.2rem;
-}
+.section-hdr { padding: 0.3rem 0.65rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em; display: flex; justify-content: space-between; align-items: center; margin: 0.5rem 0 0.2rem; }
 .hdr-overdue { background: #FEE2E2; color: var(--red); border-left: 3px solid var(--red); }
 .hdr-today { background: #FEF3C7; color: #92400E; border-left: 3px solid var(--amber); }
-.hdr-upcoming { background: var(--g50); color: var(--g600); border-left: 3px solid var(--g300, #CBD5E1); }
+.hdr-upcoming { background: var(--g50); color: var(--g600); border-left: 3px solid var(--g200); }
 
-/* TASK CARD — mobile-safe */
-.task-card {
-  background: white; border-radius: 9px;
-  padding: 0.65rem 0.85rem;
-  border: 1px solid var(--g100); border-left: 3px solid transparent;
-  cursor: pointer; transition: box-shadow 0.15s;
-  /* CRITICAL: never exceed container */
-  width: 100%; max-width: 100%; overflow: hidden;
-}
+/* TASK CARD */
+.task-card { background: white; border-radius: 9px; padding: 0.65rem 0.85rem; border: 1px solid var(--g100); border-left: 3px solid transparent; cursor: pointer; transition: box-shadow 0.15s; width: 100%; max-width: 100%; overflow: hidden; }
 .task-card:active { background: var(--g50); }
 .task-card.done { opacity: 0.45; }
 .task-card.overdue { background: #FFF8F8; }
-
 .task-top { display: flex; align-items: flex-start; gap: 0.55rem; width: 100%; overflow: hidden; }
-
-.task-cb {
-  flex-shrink: 0; width: 19px; height: 19px; border-radius: 50%;
-  border: 2px solid var(--g200); background: transparent;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  margin-top: 2px; padding: 0; transition: all 0.15s;
-}
+.task-cb { flex-shrink: 0; width: 19px; height: 19px; border-radius: 50%; border: 2px solid var(--g200); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 2px; padding: 0; transition: all 0.15s; }
 .task-cb.checked { background: var(--green); border-color: var(--green); }
 .task-cb.checked::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
-
-/* CRITICAL: body never overflows */
 .task-body { flex: 1; min-width: 0; overflow: hidden; }
-
-.task-title {
-  font-size: 0.84rem; font-weight: 500; color: var(--navy);
-  line-height: 1.4;
-  /* wrap long words */
-  word-break: break-word; overflow-wrap: anywhere; white-space: normal;
-}
+.task-title { font-size: 0.84rem; font-weight: 500; color: var(--navy); line-height: 1.4; word-break: break-word; overflow-wrap: anywhere; white-space: normal; }
 .task-card.done .task-title { text-decoration: line-through; color: var(--g400); }
-
-/* META ROW — always wraps, never overflows */
-.task-meta {
-  display: flex; gap: 0.22rem; margin-top: 0.18rem;
-  flex-wrap: wrap; align-items: center;
-  width: 100%; overflow: hidden;
-}
-
-.badge {
-  font-size: 0.58rem; padding: 0.06rem 0.38rem; border-radius: 9px;
-  font-weight: 600; white-space: nowrap; flex-shrink: 0;
-  /* never overflow badge text */
-  max-width: 100px; overflow: hidden; text-overflow: ellipsis;
-}
+.task-meta { display: flex; gap: 0.22rem; margin-top: 0.18rem; flex-wrap: wrap; align-items: center; width: 100%; overflow: hidden; }
+.badge { font-size: 0.58rem; padding: 0.06rem 0.38rem; border-radius: 9px; font-weight: 600; white-space: nowrap; flex-shrink: 0; max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
 .b-Coppermoon { background: var(--cm-bg); color: var(--cm-text); }
 .b-Recruiters { background: var(--re-bg); color: var(--re-text); }
 .b-NeoSci { background: var(--ns-bg); color: var(--ns-text); }
@@ -199,61 +114,28 @@ html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM 
 .b-InProgress { color: var(--amber); font-size: 0.58rem; font-weight: 600; }
 .b-Completed { color: var(--green); font-size: 0.58rem; font-weight: 700; }
 .b-Assigned { color: var(--purple); font-size: 0.58rem; font-weight: 600; }
-
-.task-due {
-  font-size: 0.6rem; font-weight: 500;
-  /* shrink on small screens, never overflow */
-  flex-shrink: 1; min-width: 0;
-  max-width: min(160px, 42vw);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
+.task-due { font-size: 0.6rem; font-weight: 500; flex-shrink: 1; min-width: 0; max-width: min(160px, 42vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .due-overdue { color: var(--red); font-weight: 700; }
 .due-today { color: var(--amber); font-weight: 600; }
 .due-normal { color: var(--g400); }
-
-.task-person {
-  font-size: 0.6rem; color: var(--g600);
-  flex-shrink: 1; min-width: 0;
-  max-width: min(110px, 28vw);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
+.task-person { font-size: 0.6rem; color: var(--g600); flex-shrink: 1; min-width: 0; max-width: min(110px, 28vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* EMPTY */
 .empty { text-align: center; padding: 3rem 1rem; color: var(--g400); font-size: 0.85rem; }
 .empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
 
 /* BOTTOM SHEET */
-.sheet-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(12,27,42,0.55); z-index: 500;
-  align-items: flex-end;
-}
+.sheet-overlay { display: none; position: fixed; inset: 0; background: rgba(12,27,42,0.55); z-index: 500; align-items: flex-end; }
 .sheet-overlay.open { display: flex; }
-.sheet {
-  background: white; width: 100%;
-  min-height: 55vh; max-height: 94vh;
-  border-radius: 18px 18px 0 0;
-  overflow-y: auto; padding: 1rem 1.25rem 6rem;
-  animation: slideUp 0.22s ease;
-}
+.sheet { background: white; width: 100%; min-height: 55vh; max-height: 94vh; border-radius: 18px 18px 0 0; overflow-y: auto; padding: 1rem 1.25rem 6rem; animation: slideUp 0.22s ease; }
 @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
 .sheet-handle { width: 34px; height: 4px; background: var(--g200); border-radius: 2px; margin: 0 auto 1rem; }
-
-/* SHEET FORM INPUTS */
-.sheet input[type=text], .sheet select, .sheet textarea {
-  width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid var(--g200);
-  border-radius: 8px; font-family: inherit; font-size: 0.85rem;
-  background: white; outline: none; margin-bottom: 0.45rem;
-}
+.sheet input[type=text], .sheet select, .sheet textarea { width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid var(--g200); border-radius: 8px; font-family: inherit; font-size: 0.85rem; background: white; outline: none; margin-bottom: 0.45rem; }
 .sheet input:focus, .sheet select:focus, .sheet textarea:focus { border-color: var(--copper); }
 .sheet textarea { resize: vertical; min-height: 60px; }
 .sheet-row { display: flex; gap: 0.4rem; margin-bottom: 0.45rem; }
 .sheet-row > * { flex: 1; min-width: 0; }
-.sheet-row input[type=date], .sheet-row input[type=time] {
-  padding: 0.5rem 0.5rem; border: 1.5px solid var(--g200);
-  border-radius: 8px; font-family: inherit; font-size: 0.8rem;
-  background: white; outline: none;
-}
+.sheet-row input[type=date], .sheet-row input[type=time] { padding: 0.5rem 0.5rem; border: 1.5px solid var(--g200); border-radius: 8px; font-family: inherit; font-size: 0.8rem; background: white; outline: none; width: 100%; }
 .sheet-row input:focus { border-color: var(--copper); }
 </style>
 </head>
@@ -272,7 +154,6 @@ html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM 
   <div id="main"></div>
 </div>
 
-<!-- BOTTOM SHEET -->
 <div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheet-handle"></div>
@@ -281,7 +162,6 @@ html, body { height: 100%; overflow: hidden; max-width: 100vw; font-family: 'DM 
 </div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyD1ACXyz-hnciNqvPpU7Lb7y6VLZg0sQEWGm5dgxgKubdHavbOZ6ymlzkp_PvHcZHoJg/exec';
 const SK = 'cm_tasks_v6';
 const TODAY = new Date().toISOString().slice(0,10);
@@ -289,20 +169,18 @@ const CATS = ['Coppermoon','Recruiters','NeoSci','Personal'];
 const PRIS = ['High','Medium','Low'];
 const STATS = ['Pending','In Progress','Completed','Assigned'];
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
 let tasks = [];
-let tab = 'active'; // active | completed
+let tab = 'active';
 let filterCat = 'All';
 let search = '';
 let showForm = false;
 let saveTimer = null;
 let saving = false;
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 const esc = s => !s ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const isDone = t => t.done === true || t.done === 'TRUE' || t.status === 'Completed';
-const isOver = t => !isDone(t) && t.due && t.due < TODAY;
+const isOver = t => !isDone(t) && t.due && t.due.slice(0,10) < TODAY;
 const isToday = t => !isDone(t) && t.due && t.due.slice(0,10) === TODAY;
 const daysBetween = (d1,d2) => Math.round((new Date(d1) - new Date(d2)) / 86400000);
 
@@ -313,9 +191,9 @@ function fmtDate(d) {
 
 function dueLabel(t) {
   if (!t.due) return '';
-  if (isOver(t)) return `${Math.abs(daysBetween(t.due, TODAY))}d overdue · ${fmtDate(t.due)}`;
+  if (isOver(t)) return `${Math.abs(daysBetween(t.due.slice(0,10), TODAY))}d overdue · ${fmtDate(t.due)}`;
   if (isToday(t)) return 'Due today';
-  const days = daysBetween(t.due, TODAY);
+  const days = daysBetween(t.due.slice(0,10), TODAY);
   if (days <= 7) return `${days}d · ${fmtDate(t.due)}`;
   return fmtDate(t.due);
 }
@@ -326,11 +204,8 @@ function dueCls(t) {
   return 'due-normal';
 }
 
-function catBorderColor(cat) {
-  return cat==='Coppermoon' ? 'var(--cm-border)' :
-         cat==='Recruiters' ? 'var(--re-border)' :
-         cat==='NeoSci'     ? 'var(--ns-border)' :
-                              'var(--pe-border)';
+function catBorder(cat) {
+  return cat==='Coppermoon'?'var(--cm-border)':cat==='Recruiters'?'var(--re-border)':cat==='NeoSci'?'var(--ns-border)':'var(--pe-border)';
 }
 
 function fixDate(val) {
@@ -341,19 +216,14 @@ function fixDate(val) {
     const d = new Date((Number(s) - 25569) * 86400000);
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
-  if (s.includes('T') || s.includes('Z')) {
-    try { return new Date(s).toISOString().slice(0,10); } catch { return ''; }
-  }
+  if (s.includes('T') || s.includes('Z')) { try { return new Date(s).toISOString().slice(0,10); } catch { return ''; } }
   if (s.startsWith('1899') || s.startsWith('1900')) return '';
   return s.slice(0,10);
 }
 
 // ─── LOAD / SAVE ─────────────────────────────────────────────────────────────
 function loadLocal() {
-  try {
-    const s = localStorage.getItem(SK);
-    if (s) tasks = JSON.parse(s);
-  } catch {}
+  try { const s = localStorage.getItem(SK); if (s) tasks = JSON.parse(s); } catch {}
 }
 
 function saveLocal() {
@@ -377,15 +247,17 @@ async function loadFromSheets() {
       render();
       syncMsg('✓ Synced', 'var(--green)');
     }
-  } catch {
-    syncMsg('Offline — local only', 'var(--amber)');
-  }
+  } catch { syncMsg('Offline — local only', 'var(--amber)'); }
 }
 
+// KEY FIX: POST instead of GET — no URL length limit
 async function saveToSheets() {
+  if (saving) return;
+  saving = true;
   try {
     const res = await fetch(SHEETS_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ action: 'write', tasks: tasks })
     });
     const data = await res.json();
@@ -393,11 +265,12 @@ async function saveToSheets() {
       syncMsg('✓ Saved', 'var(--green)');
     } else {
       syncMsg('⚠ Save failed', 'var(--red)');
+      console.error('Save error:', data.error);
     }
-  } catch {
+  } catch(e) {
     syncMsg('Offline', 'var(--amber)');
+    console.error('Save fetch error:', e);
   }
-}
   saving = false;
 }
 
@@ -418,25 +291,20 @@ function syncMsg(msg, color) {
 
 // ─── ACTIONS ─────────────────────────────────────────────────────────────────
 function addTask(data) {
+  if (!data.title.trim()) return;
   const t = {
-    id: genId(),
-    title: data.title.trim(),
+    id: genId(), title: data.title.trim(),
     category: data.category || 'Coppermoon',
     priority: data.priority || 'Medium',
     status: data.status || 'Pending',
-    due: data.due || TODAY,
-    time: data.time || '',
-    person: data.person || '',
-    company: data.company || '',
-    notes: data.notes || '',
-    done: false,
-    created: TODAY,
-    completedDate: ''
+    due: data.due || TODAY, time: data.time || '',
+    person: data.person || '', company: data.company || '',
+    notes: data.notes || '', done: false,
+    created: TODAY, completedDate: ''
   };
   tasks.unshift(t);
   showForm = false;
-  save();
-  render();
+  save(); render();
 }
 
 function toggleDone(id, e) {
@@ -446,32 +314,22 @@ function toggleDone(id, e) {
     const done = !isDone(t);
     return { ...t, done, status: done ? 'Completed' : 'Pending', completedDate: done ? TODAY : '' };
   });
-  save();
-  render();
+  save(); render();
 }
 
 function deleteTask(id) {
   if (!confirm('Delete this task?')) return;
   tasks = tasks.filter(t => t.id !== id);
-  closeSheet();
-  save();
-  render();
+  closeSheet(); save(); render();
 }
 
 function updateTask(id, data) {
-  tasks = tasks.map(t => {
-    if (t.id !== id) return t;
-    return { ...t, ...data };
-  });
-  closeSheet();
-  save();
-  render();
+  tasks = tasks.map(t => t.id !== id ? t : { ...t, ...data });
+  closeSheet(); save(); render();
 }
 
 // ─── SHEET ───────────────────────────────────────────────────────────────────
-function closeSheet() {
-  document.getElementById('sheet-overlay').classList.remove('open');
-}
+function closeSheet() { document.getElementById('sheet-overlay').classList.remove('open'); }
 
 function openSheet(html) {
   document.getElementById('sheet-body').innerHTML = html;
@@ -481,25 +339,24 @@ function openSheet(html) {
 function openTaskDetail(id) {
   const t = tasks.find(x => x.id === id);
   if (!t) return;
-  const over = isOver(t);
-  const done = isDone(t);
+  const over = isOver(t); const done = isDone(t);
   openSheet(`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem">
-      <div style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;padding-right:1rem">${esc(t.title)}</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;padding-right:1rem;word-break:break-word">${esc(t.title)}</div>
       <button onclick="closeSheet()" style="background:var(--g50);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:1rem;color:var(--g600);flex-shrink:0">✕</button>
     </div>
     <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.85rem">
       <span class="badge b-${t.category}">${t.category}</span>
       <span class="badge b-${t.priority}">${t.priority}</span>
       <span class="badge b-${t.status.replace(' ','')}">${t.status}</span>
-      ${over ? `<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due, TODAY))}d overdue</span>` : ''}
+      ${over ? `<span class="badge" style="background:#FEE2E2;color:var(--red)">${Math.abs(daysBetween(t.due.slice(0,10), TODAY))}d overdue</span>` : ''}
     </div>
-    ${t.due ? `<div style="margin-bottom:0.5rem"><div style="font-size:0.62rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.1rem">Due</div><div style="font-size:0.85rem">${new Date(t.due+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}${t.time ? ' @ ' + t.time : ''}</div></div>` : ''}
+    ${t.due ? `<div style="margin-bottom:0.5rem"><div style="font-size:0.62rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.1rem">Due</div><div style="font-size:0.85rem">${new Date(t.due+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}${t.time?' @ '+t.time:''}</div></div>` : ''}
     ${t.person ? `<div style="margin-bottom:0.5rem"><div style="font-size:0.62rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.1rem">Person</div><div style="font-size:0.85rem">👤 ${esc(t.person)}</div></div>` : ''}
     ${t.company ? `<div style="margin-bottom:0.5rem"><div style="font-size:0.62rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.1rem">Company</div><div style="font-size:0.85rem">🏢 ${esc(t.company)}</div></div>` : ''}
     ${t.notes ? `<div style="margin-bottom:0.85rem"><div style="font-size:0.62rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.1rem">Notes</div><div style="font-size:0.82rem;color:var(--g600);line-height:1.6;background:var(--g50);border-radius:8px;padding:0.55rem 0.7rem">${esc(t.notes)}</div></div>` : ''}
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--g100)">
-      <button onclick="toggleDone('${t.id}',null);closeSheet();render()" 
+      <button onclick="toggleDone('${t.id}',null);closeSheet();render()"
         style="width:28px;height:28px;border-radius:50%;border:2px solid ${done?'var(--green)':'var(--g200)'};background:${done?'var(--green)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:12px;font-weight:700;color:white;flex-shrink:0">
         ${done ? '✓' : ''}
       </button>
@@ -523,7 +380,7 @@ function openEditSheet(id) {
       <select id="e-cat">${CATS.map(c=>`<option${t.category===c?' selected':''}>${c}</option>`).join('')}</select>
       <select id="e-pri">${PRIS.map(p=>`<option${t.priority===p?' selected':''}>${p}</option>`).join('')}</select>
     </div>
-    <select id="e-stat" style="margin-bottom:0.45rem">${STATS.map(s=>`<option${t.status===s?' selected':''}>${s}</option>`).join('')}</select>
+    <select id="e-stat">${STATS.map(s=>`<option${t.status===s?' selected':''}>${s}</option>`).join('')}</select>
     <div class="sheet-row">
       <input id="e-due" type="date" value="${t.due||''}" />
       <input id="e-time" type="time" value="${t.time||''}" />
@@ -543,9 +400,9 @@ function saveEdit(id) {
   if (!title.trim()) return;
   updateTask(id, {
     title: title.trim(),
-    category: (document.getElementById('e-cat')||{}).value || 'Coppermoon',
-    priority: (document.getElementById('e-pri')||{}).value || 'Medium',
-    status: (document.getElementById('e-stat')||{}).value || 'Pending',
+    category: (document.getElementById('e-cat')||{}).value,
+    priority: (document.getElementById('e-pri')||{}).value,
+    status: (document.getElementById('e-stat')||{}).value,
     due: (document.getElementById('e-due')||{}).value || '',
     time: (document.getElementById('e-time')||{}).value || '',
     person: (document.getElementById('e-person')||{}).value || '',
@@ -563,10 +420,10 @@ function submitAdd() {
     priority: (document.getElementById('a-pri')||{}).value,
     status: (document.getElementById('a-stat')||{}).value,
     due: (document.getElementById('a-due')||{}).value || TODAY,
-    time: (document.getElementById('a-time')||{}).value,
-    person: (document.getElementById('a-person')||{}).value,
-    company: (document.getElementById('a-company')||{}).value,
-    notes: (document.getElementById('a-notes')||{}).value
+    time: (document.getElementById('a-time')||{}).value || '',
+    person: (document.getElementById('a-person')||{}).value || '',
+    company: (document.getElementById('a-company')||{}).value || '',
+    notes: (document.getElementById('a-notes')||{}).value || ''
   });
 }
 
@@ -583,20 +440,10 @@ function gcalUrl(t) {
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
-function render() {
-  renderTopbar();
-  renderStats();
-  renderTabs();
-  renderToolbar();
-  renderMain();
-}
+function render() { renderTopbar(); renderStats(); renderTabs(); renderToolbar(); renderMain(); }
 
 function renderTopbar() {
-  document.getElementById('topbar-right').innerHTML = `
-    <button class="btn btn-ghost" onclick="showForm=!showForm;render()">
-      ${showForm ? '✕ Cancel' : '+ Add Task'}
-    </button>
-  `;
+  document.getElementById('topbar-right').innerHTML = `<button class="btn btn-ghost" onclick="showForm=!showForm;render()">${showForm ? '✕ Cancel' : '+ Add Task'}</button>`;
 }
 
 function renderStats() {
@@ -634,8 +481,7 @@ function renderToolbar() {
       </select>
     `;
     document.getElementById('search-input').addEventListener('input', function() {
-      search = this.value;
-      renderMain();
+      search = this.value; renderMain();
     });
   }
 }
@@ -657,50 +503,45 @@ function renderMain() {
 
   let html = '';
 
-  // Add form
   if (showForm && tab === 'active') {
-    html += `
-      <div class="add-form">
-        <input id="a-title" type="text" placeholder="Task title..." autofocus />
-        <div class="form-row">
-          <select id="a-cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
-          <select id="a-pri">${PRIS.map(p=>`<option>${p}</option>`).join('')}</select>
-          <select id="a-stat">${STATS.map(s=>`<option>${s}</option>`).join('')}</select>
-        </div>
-        <div class="form-row">
-          <input type="date" id="a-due" value="${TODAY}" />
-          <input type="time" id="a-time" />
-        </div>
-        <div class="form-row">
-          <input type="text" id="a-person" placeholder="Person..." />
-          <input type="text" id="a-company" placeholder="Company..." />
-        </div>
-        <textarea id="a-notes" placeholder="Notes..." rows="2"></textarea>
-        <div class="form-actions">
-          <button class="btn btn-copper" onclick="submitAdd()">Add Task</button>
-          <button class="btn btn-ghost-dark" onclick="showForm=false;renderMain();renderTopbar()">Cancel</button>
-        </div>
+    html += `<div class="add-form">
+      <input id="a-title" type="text" placeholder="Task title..." autofocus />
+      <div class="form-row">
+        <select id="a-cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+        <select id="a-pri">${PRIS.map(p=>`<option>${p}</option>`).join('')}</select>
+        <select id="a-stat">${STATS.map(s=>`<option>${s}</option>`).join('')}</select>
       </div>
-    `;
+      <div class="form-row">
+        <input type="date" id="a-due" value="${TODAY}" />
+        <input type="time" id="a-time" />
+      </div>
+      <div class="form-row">
+        <input type="text" id="a-person" placeholder="Person..." />
+        <input type="text" id="a-company" placeholder="Company..." />
+      </div>
+      <textarea id="a-notes" placeholder="Notes..." rows="2"></textarea>
+      <div class="form-actions">
+        <button class="btn btn-copper" onclick="submitAdd()">Add Task</button>
+        <button class="btn btn-ghost-dark" onclick="showForm=false;renderMain();renderTopbar()">Cancel</button>
+      </div>
+    </div>`;
   }
 
   if (list.length === 0) {
-    html += `<div class="empty"><div class="empty-icon">${tab==='completed'?'📋':'✅'}</div>${search ? 'No matching tasks.' : tab==='completed' ? 'No completed tasks.' : 'All clear!'}</div>`;
+    html += `<div class="empty"><div class="empty-icon">${tab==='completed'?'📋':'✅'}</div>${search?'No matching tasks.':tab==='completed'?'No completed tasks.':'All clear!'}</div>`;
     mc.innerHTML = html;
     return;
   }
 
-  // Group active tasks
   if (tab === 'active') {
     const overdue = list.filter(t => isOver(t)).sort((a,b) => a.due < b.due ? -1 : 1);
     const today = list.filter(t => isToday(t));
     const upcoming = list.filter(t => !isOver(t) && !isToday(t)).sort((a,b) => {
-      const ad = a.due || '9999', bd = b.due || '9999';
+      const ad = a.due||'9999', bd = b.due||'9999';
       if (ad !== bd) return ad < bd ? -1 : 1;
       const po = {High:0,Medium:1,Low:2};
       return (po[a.priority]||1) - (po[b.priority]||1);
     });
-
     html += '<div class="task-list">';
     if (overdue.length) {
       html += `<div class="section-hdr hdr-overdue"><span>⚠ Overdue</span><span>${overdue.length}</span></div>`;
@@ -716,7 +557,6 @@ function renderMain() {
     }
     html += '</div>';
   } else {
-    // Completed — newest first
     list.sort((a,b) => (b.completedDate||'') > (a.completedDate||'') ? 1 : -1);
     html += '<div class="task-list">';
     html += `<div style="font-size:0.72rem;color:var(--g400);margin-bottom:0.3rem">${list.length} completed task${list.length!==1?'s':''}</div>`;
@@ -728,40 +568,33 @@ function renderMain() {
 }
 
 function renderCard(t) {
-  const dl = dueLabel(t);
-  const dc = dueCls(t);
-  const done = isDone(t);
-  const over = isOver(t);
-  return `
-    <div class="task-card${done?' done':''}${over?' overdue':''}"
-      style="border-left-color:${catBorderColor(t.category)}"
-      onclick="openTaskDetail('${t.id}')">
-      <div class="task-top">
-        <button class="task-cb${done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
-        <div class="task-body">
-          <div class="task-title">${esc(t.title)}</div>
-          <div class="task-meta">
-            <span class="badge b-${t.category}">${t.category}</span>
-            <span class="badge b-${t.priority}">${t.priority}</span>
-            <span class="badge b-${t.status.replace(' ','')}">${t.status}</span>
-            ${dl ? `<span class="task-due ${dc}">${esc(dl)}</span>` : ''}
-            ${t.person ? `<span class="task-person">👤 ${esc(t.person)}</span>` : ''}
-            ${t.company ? `<span class="task-person">🏢 ${esc(t.company)}</span>` : ''}
-          </div>
+  const dl = dueLabel(t); const dc = dueCls(t);
+  const done = isDone(t); const over = isOver(t);
+  return `<div class="task-card${done?' done':''}${over?' overdue':''}" style="border-left-color:${catBorder(t.category)}" onclick="openTaskDetail('${t.id}')">
+    <div class="task-top">
+      <button class="task-cb${done?' checked':''}" onclick="toggleDone('${t.id}',event)"></button>
+      <div class="task-body">
+        <div class="task-title">${esc(t.title)}</div>
+        <div class="task-meta">
+          <span class="badge b-${t.category}">${t.category}</span>
+          <span class="badge b-${t.priority}">${t.priority}</span>
+          <span class="badge b-${t.status.replace(' ','')}">${t.status}</span>
+          ${dl ? `<span class="task-due ${dc}">${esc(dl)}</span>` : ''}
+          ${t.person ? `<span class="task-person">👤 ${esc(t.person)}</span>` : ''}
+          ${t.company ? `<span class="task-person">🏢 ${esc(t.company)}</span>` : ''}
         </div>
       </div>
     </div>
-  `;
+  </div>`;
 }
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
-loadLocal();
-render();
-loadFromSheets();
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSheet();
+window.addEventListener('load', () => {
+  loadLocal();
+  render();
+  loadFromSheets();
 });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
 </script>
 </body>
 </html>
